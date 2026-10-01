@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<!-- la K del marchio come icona della scheda -->
+<link rel="icon" href="favicon.svg">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KORE — Il credito. Più intelligente.</title>
+<meta name="description" content="KORE qualifica i lead del credito al consumo: agenti AI, lettura documenti e verifica di idoneità, integrati con il tuo CRM.">
+
+<script>
+/* Il tema va scelto PRIMA che la pagina venga disegnata, altrimenti si vede
+   un lampo chiaro su chi ha scelto lo scuro. Per questo sta qui e non in React. */
+(function(){try{
+  var q=/[?&]theme=dark/.test(location.search);
+  if(q||localStorage.getItem('kore-theme')==='dark')document.documentElement.classList.add('theme-dark');
+}catch(e){}})();
+
+/* L'indirizzo del ponte Apps Script che crea il Lead nel CRM.
+   E' l'unico punto da cambiare. La chiave dell HTTP Handler NON sta qui:
+   vive nelle proprieta' del progetto Apps Script, fuori dal sito. */
+window.KORE_CRM_ENDPOINT='https://script.google.com/macros/s/AKfycbw_mSjCLV05HVDwuLIhQmLVYYj4TRlNxROuYJBjEgRpkqe9LNkHSzkWv-xthbCZxpwY/exec';
+</script>
+  <script type="module" crossorigin src="/acquista/assets/index-U8733FG8.js"></script>
+  <link rel="stylesheet" crossorigin href="/acquista/assets/index-BpHX9PSw.css">
+</head>
+<body>
+<div id="root"></div>
+</body>
+</html>

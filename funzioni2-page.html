@@ -1,0 +1,265 @@
+<!-- ============================================================
+     KORE — pagina "Funzioni2" (tema chiaro, stile blueprint)
+     Estratto da index.html. Tre parti:
+       1) CSS   -> dentro <style> in <head>
+       2) HTML  -> il bottone nell'header + la <section> prima di </body>
+       3) JS    -> gli <script> prima di </body>
+     Dipendenze dal resto di index.html:
+       - font "DM Mono" (definito in index.html)
+       - le keyframes "why-in" e "why-caret" (definite nella pagina "Perché KORE?")
+       - il bottone #book-demo (il pulsante "Prova …" lo clicca per aprire la demo)
+       - funzioni globali opzionali: closePricing, stopAuto, __whyClose, __fnClose, __fn2Close, __fn3Close
+     Apertura: click sul bottone #fn4-btn oppure URL con #funzioni2
+     ============================================================ -->
+
+<!-- 1) CSS ======================================================== -->
+<style>
+/* v114 — Funzioni3: pagina "blueprint" scura, sette blocchi in colonna uniti da una spina centrale con nodi a rombo, grafiche isometriche che si disegnano allo scorrimento */
+#fn4-screen{position:fixed;inset:0;z-index:40;background:#15101d;color:#e9dcff;font-family:'DM Mono',monospace;display:none;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+#fn4-screen::-webkit-scrollbar{display:none}
+#fn4-screen.is-open{display:block;animation:why-in .35s ease both}
+.f4-wrap{position:relative;margin-top:var(--f4-top,104px);padding:0 5% 120px 6.25%;border-top:1px solid #3d3646;
+ background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:56px 56px}
+.f4-intro{display:grid;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr);align-items:end;padding:56px 0 24px}
+.f4-intro h2{grid-column:1;font-size:clamp(30px,3.2vw,52px);font-weight:500;letter-spacing:-.02em;text-transform:uppercase;line-height:1;margin:0;color:#fff}
+.f4-intro h2 span{color:#8b4dff}
+.f4-intro p{grid-column:3;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a996c9;margin:0 0 6px}
+.f4-intro p::before{content:"// "}.f4-intro p::after{content:" //"}
+/* spina centrale */
+.f4-spine{position:absolute;left:calc(6.25% + (100% - 11.25%)/2);top:0;bottom:0;width:1px;background:rgba(255,255,255,.14);pointer-events:none}
+.f4-spine i{position:absolute;left:0;top:0;width:1px;height:var(--f4-prog,0%);background:linear-gradient(#8b4dff,#6315e8);box-shadow:0 0 12px #8b4dff}
+.f4-spine i::after{content:"";position:absolute;left:-3px;bottom:-3px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 12px #fff}
+/* blocchi */
+.f4-sec{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr);align-items:center;gap:0;min-height:min(74svh,660px);padding:24px 0}
+.f4-sec:nth-child(even) .f4-graphic{grid-column:3;order:3}
+.f4-sec:nth-child(even) .f4-text{grid-column:1;order:1;text-align:right;align-items:flex-end}
+.f4-sec:nth-child(even) .f4-list li{flex-direction:row-reverse}
+.f4-graphic{grid-column:1;position:relative;padding:0 30px}
+.f4-graphic svg{width:100%;height:auto;display:block;overflow:visible}
+.f4-graphic .st{fill:none;stroke:#cdbbe9;stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.f4-graphic .ft{fill:rgba(255,255,255,.05)}.f4-graphic .fl{fill:rgba(99,21,232,.22)}.f4-graphic .fr{fill:rgba(99,21,232,.10)}
+.f4-graphic .hi .ft{fill:#a06bff}.f4-graphic .hi .fl{fill:#6315e8}.f4-graphic .hi .fr{fill:#4a0fb3}.f4-graphic .hi .st{stroke:#e9dcff}
+.f4-graphic .hi{animation:f4-pulse 3.4s ease-in-out infinite}
+@keyframes f4-pulse{0%,100%{filter:drop-shadow(0 0 0 rgba(160,107,255,0))}50%{filter:drop-shadow(0 0 10px rgba(160,107,255,.8))}}
+.f4-graphic .lab{font-size:9px;letter-spacing:.14em;fill:#a996c9;text-transform:uppercase}
+.f4-graphic .lab b{fill:#fff;font-weight:500}
+.f4-graphic .lead{fill:none;stroke:rgba(255,255,255,.35);stroke-width:1;vector-effect:non-scaling-stroke}
+.f4-graphic .grid{fill:none;stroke:rgba(255,255,255,.07);stroke-width:1;vector-effect:non-scaling-stroke}
+.f4-graphic .scan{fill:none;stroke:#a06bff;stroke-width:1.5;stroke-dasharray:4 4;vector-effect:non-scaling-stroke;animation:f4-scan 2.6s linear infinite}
+@keyframes f4-scan{to{stroke-dashoffset:-32}}
+.f4-graphic .wave{fill:none;stroke:#8b4dff;stroke-width:1;opacity:.6;vector-effect:non-scaling-stroke;animation:f4-wave 3s ease-out infinite}
+.f4-graphic .wave:nth-child(2){animation-delay:1s}.f4-graphic .wave:nth-child(3){animation-delay:2s}
+@keyframes f4-wave{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.15);opacity:0}}
+.f4-graphic .dot{fill:#cdbbe9}.f4-graphic .dot.off{fill:none;stroke:#7a5aa8;stroke-width:1}
+.f4-graphic .ex{stroke:#ff7a90;stroke-width:1.3;vector-effect:non-scaling-stroke}
+.f4-graphic .otp{font-size:16px;letter-spacing:.3em;fill:#fff;font-weight:500}
+.f4-caption{margin:14px 0 0 30px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a996c9}
+.f4-sec:nth-child(even) .f4-caption{text-align:right;margin:14px 30px 0 0}
+.f4-caption::before{content:"// "}.f4-caption::after{content:" //"}
+/* disegno progressivo */
+.f4-sec .draw{stroke-dasharray:var(--l,1000);stroke-dashoffset:var(--l,1000);transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)}
+.f4-sec .fill{opacity:0;transition:opacity .8s ease 1s}
+.f4-sec.is-in .draw{stroke-dashoffset:0}
+.f4-sec.is-in .fill{opacity:1}
+.f4-sec .lab,.f4-sec .lead{opacity:0;transition:opacity .5s ease 1.3s}
+.f4-sec.is-in .lab,.f4-sec.is-in .lead{opacity:1}
+/* nodo */
+.f4-node{grid-column:2;order:2;display:flex;align-items:center;justify-content:center;align-self:center}
+.f4-diamond{width:44px;height:44px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.35);background:#15101d;transform:rotate(45deg);font-size:11px;color:#a996c9;transition:border-color .5s,color .5s,box-shadow .5s,background .5s}
+.f4-diamond span{transform:rotate(-45deg)}
+.f4-sec.is-in .f4-diamond{border-color:#a06bff;color:#fff;background:#6315e8;box-shadow:0 0 0 6px rgba(99,21,232,.18),0 0 24px rgba(139,77,255,.6)}
+/* testo */
+.f4-text{grid-column:3;order:3;display:flex;flex-direction:column;align-items:flex-start;padding:0 30px}
+.f4-n{font-size:12px;letter-spacing:.2em;color:#8b4dff;margin:0 0 12px;opacity:0;transform:translateY(10px);transition:opacity .5s ease .2s,transform .5s ease .2s}
+.f4-text h3{font-size:clamp(22px,2.3vw,36px);font-weight:500;text-transform:uppercase;letter-spacing:-.01em;line-height:1.1;margin:0 0 16px;color:#fff;max-width:520px;opacity:0;transform:translateY(12px);transition:opacity .6s ease .3s,transform .6s ease .3s}
+.f4-desc{font-size:12.5px;line-height:1.7;color:#cdbbe9;margin:0 0 20px;max-width:480px;opacity:0;transition:opacity .6s ease .5s}
+.f4-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;max-width:520px}
+.f4-list li{display:flex;gap:12px;align-items:flex-start;font-size:11.5px;line-height:1.6;letter-spacing:.02em;color:#e9dcff;opacity:0;transform:translateX(var(--dx,-14px));transition:opacity .45s ease,transform .45s ease}
+.f4-sec:nth-child(even) .f4-list li{--dx:14px}
+.f4-list li::before{content:"/";color:#8b4dff;font-weight:500;flex:none}
+.f4-sec.is-in .f4-n,.f4-sec.is-in .f4-text h3,.f4-sec.is-in .f4-desc{opacity:1;transform:none}
+.f4-sec.is-in .f4-list li{opacity:1;transform:none}
+.f4-sec.is-in .f4-list li:nth-child(1){transition-delay:.6s}.f4-sec.is-in .f4-list li:nth-child(2){transition-delay:.72s}.f4-sec.is-in .f4-list li:nth-child(3){transition-delay:.84s}.f4-sec.is-in .f4-list li:nth-child(4){transition-delay:.96s}.f4-sec.is-in .f4-list li:nth-child(5){transition-delay:1.08s}
+.f4-try{margin-top:22px;display:inline-flex;align-items:center;gap:12px;border:1px solid #8b4dff;background:transparent;color:#fff;border-radius:30px;padding:9px 16px;font:inherit;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;opacity:0;transition:opacity .5s ease 1.2s,background .2s,color .2s}
+.f4-sec.is-in .f4-try{opacity:1}
+.f4-try:hover{background:#6315e8}
+.f4-end{display:grid;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr);padding:40px 0 0}
+.f4-end .f4-diamond{grid-column:2;justify-self:center}
+@media(max-width:900px){
+.f4-wrap{padding:0 5% 80px}
+.f4-spine{left:22px}
+.f4-intro{grid-template-columns:1fr;padding:40px 0 10px 40px}.f4-intro p{grid-column:1;margin-top:10px}
+.f4-sec{grid-template-columns:1fr;min-height:0;padding:30px 0 30px 40px;gap:18px}
+.f4-sec .f4-graphic,.f4-sec:nth-child(even) .f4-graphic{grid-column:1;order:2;padding:0}
+.f4-sec .f4-text,.f4-sec:nth-child(even) .f4-text{grid-column:1;order:1;text-align:left;align-items:flex-start;padding:0}
+.f4-sec:nth-child(even) .f4-list li{flex-direction:row;--dx:-14px}
+.f4-node{position:absolute;left:-40px;top:34px;width:44px}
+.f4-diamond{width:32px;height:32px;font-size:9px}
+.f4-caption,.f4-sec:nth-child(even) .f4-caption{margin:10px 0 0;text-align:left}
+.f4-end{grid-template-columns:1fr;padding-left:0}.f4-end .f4-diamond{grid-column:1;justify-self:start;margin-left:6px}
+}
+@media(prefers-reduced-motion:reduce){.f4-sec .draw,.f4-sec .fill,.f4-sec .lab,.f4-sec .lead,.f4-n,.f4-text h3,.f4-desc,.f4-list li,.f4-try{transition:none}.f4-graphic .hi,.f4-graphic .scan,.f4-graphic .wave{animation:none}}
+
+/* v114 — Funzioni2: stessa pagina blueprint con il tema chiaro KORE */
+#fn4-screen{background:#ede2fd;color:#1c1330}
+#fn4-screen .f4-wrap{background-image:linear-gradient(rgba(61,54,70,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(61,54,70,.07) 1px,transparent 1px)}
+#fn4-screen .f4-intro h2{color:#1c1330}
+#fn4-screen .f4-intro p,#fn4-screen .f4-caption{color:#7f6f94}
+#fn4-screen .f4-spine{background:rgba(61,54,70,.25)}
+#fn4-screen .f4-spine i{background:linear-gradient(#8b4dff,#6315e8);box-shadow:0 0 10px rgba(99,21,232,.45)}
+#fn4-screen .f4-spine i::after{background:#6315e8;box-shadow:0 0 0 4px rgba(99,21,232,.18)}
+#fn4-screen .f4-graphic .st{stroke:#3d3646}
+#fn4-screen .f4-graphic .ft{fill:rgba(255,255,255,.7)}
+#fn4-screen .f4-graphic .fl{fill:rgba(99,21,232,.16)}
+#fn4-screen .f4-graphic .fr{fill:rgba(99,21,232,.08)}
+#fn4-screen .f4-graphic .hi .ft{fill:#a06bff}
+#fn4-screen .f4-graphic .hi .fl{fill:#6315e8}
+#fn4-screen .f4-graphic .hi .fr{fill:#4a0fb3}
+#fn4-screen .f4-graphic .hi .st{stroke:#2a1650}
+#fn4-screen .f4-graphic .lab{fill:#6b5a83}
+#fn4-screen .f4-graphic .lead{stroke:rgba(61,54,70,.45)}
+#fn4-screen .f4-graphic .grid{stroke:rgba(61,54,70,.12)}
+#fn4-screen .f4-graphic .scan{stroke:#6315e8}
+#fn4-screen .f4-graphic .wave{stroke:#6315e8}
+#fn4-screen .f4-graphic .dot{fill:#6315e8}
+#fn4-screen .f4-graphic .dot.off{fill:none;stroke:#9a8db0}
+#fn4-screen .f4-graphic .ex{stroke:#d6335a}
+#fn4-screen .f4-graphic .otp{fill:#1c1330}
+#fn4-screen .f4-diamond{background:#ede2fd;border-color:rgba(61,54,70,.4);color:#7f6f94}
+#fn4-screen .f4-sec.is-in .f4-diamond{background:#6315e8;border-color:#6315e8;color:#fff;box-shadow:0 0 0 6px rgba(99,21,232,.14),0 10px 24px -8px rgba(99,21,232,.55)}
+#fn4-screen .f4-n{color:#6315e8}
+#fn4-screen .f4-text h3{color:#1c1330}
+#fn4-screen .f4-desc{color:#3f3350}
+#fn4-screen .f4-list li{color:#1c1330}
+#fn4-screen .f4-list li::before{color:#6315e8}
+#fn4-screen .f4-try{border-color:#6315e8;color:#6315e8}
+#fn4-screen .f4-try:hover{background:#6315e8;color:#fff}
+.top #fn4-btn{background:transparent!important;border:0!important;box-shadow:none;padding:8px 10px!important;font-size:17px!important;letter-spacing:-.01em;color:#5f4f72}
+.top #fn4-btn:hover,.top #fn4-btn[aria-pressed="true"]{color:#6315e8;transform:none}
+body.fn3-open .top #fn4-btn{color:#cdbbe9}
+body.fn4-open .top{background:#ede2fd}
+@media(max-width:800px){.top #fn4-btn{font-size:15px!important}}
+</style>
+
+<!-- 2) HTML: bottone nell'header (dentro <header class="top">) ==== -->
+<button class="cta cta-ghost" type="button" id="fn4-btn" aria-pressed="false">Funzioni2</button>
+
+<!-- 2) HTML: la pagina (prima di </body>) ========================== -->
+<section id="fn4-screen" hidden aria-hidden="true" aria-label="Funzioni2">
+<div class="f4-wrap" id="f4-wrap">
+ <div class="f4-spine" aria-hidden="true"><i id="f4-spine-fill"></i></div>
+ <div class="f4-intro"><h2>Le funzioni <span>KORE</span></h2><p>Infrastruttura moderna per il credito</p></div>
+ <div id="f4-sections"></div>
+ <div class="f4-end"><div class="f4-diamond"><span>&#10003;</span></div></div>
+</div>
+</section>
+
+<!-- 3) JS (prima di </body>) ====================================== -->
+<script>
+/* v114 — Funzioni3: dati, grafiche isometriche generate, disegno allo scorrimento, spina che si riempie */
+(function(){
+ var scr=document.getElementById('fn4-screen'),btn=document.getElementById('fn4-btn'),host=document.getElementById('f4-sections');if(!scr||!btn||!host)return;
+ var F=[
+  {name:'All Message',cap:'Casella condivisa',title:"Tutte le conversazioni in un'unica casella condivisa",desc:"WhatsApp ed email in un'unica cronologia per cliente, visibile a tutto il team \u2014 non sul telefono personale di un operatore. Etichette, allegati, modelli e fascicolo cliente nella stessa schermata.",steps:["WhatsApp Business viene collegato tramite un provider certificato: messaggi in entrata, ricevute di consegna e allegati arrivano direttamente sulla piattaforma.","Vedi in ogni momento dove si trova il cliente nel funnel: dove si \u00e8 fermato, quale problema ha, se serve un intervento umano."],g:'inbox'},
+  {name:'Gli agenti AI',cap:'Agente AI',title:"L'agente AI che raccoglie davvero i documenti",desc:"Un agente AI risponde su WhatsApp, conferma i dati del cliente, chiede i documenti e tiene viva la conversazione. Quando il lead \u00e8 lavorato finisce in mano ad un operatore.",steps:["I clienti scrivono in mille modi diversi: le risposte vengono sempre riportate in un'unica chat, divise per categorie.","Codice fiscale, partita IVA e IBAN sono verificati automaticamente: se non sono validi, si scopre subito.","Un dato in conflitto non sovrascrive quello esistente: crea una segnalazione nella cronologia.","Decidi tu quando la conversazione deve passare ad un operatore (troppo tempo senza risposta, richiesta esplicita del cliente\u2026).","Se manca un campo obbligatorio, un agente AI lo richiede e il percorso del lead riparte da solo appena risponde."],g:'agent'},
+  {name:'Argo',cap:'Lettura documenti',title:"Una piattaforma pensata per il credito al consumo",desc:"Argo \u00e8 addestrato a riconoscere una busta paga, un modello OBIS M, una CU o un cedolino pensione, ed estrae le informazioni che servono davvero al credito al consumo.",steps:["I documenti inviati su WhatsApp entrano da soli nel fascicolo: nessun caricamento manuale, nessuna ricopiatura.","Argo estrae stipendio netto, tipo di contratto, datore di lavoro, trattenute e quota cedibile.","I doppioni vengono riconosciuti ed esclusi; l'originale resta sempre visibile accanto ai dati estratti.","La scheda cliente si aggiorna con i nuovi dati e conserva i precedenti."],g:'argo'},
+  {name:'Argo+',cap:'Valutazione',title:"Valutazione dei documenti",desc:"Argo+ recupera i dati da Argo e pronuncia un verdetto motivato: idoneo, da rivedere, non idoneo.",steps:["Pre-valutazione prestito: sei tu a definire le condizioni di finanziamento, Argo+ le applica a ogni cliente.","Verifica CTC: analizza la posizione creditizia del cliente.","Verifica CRIF: controlla le richieste di finanziamento gi\u00e0 presentate.","Verifica assicurativa: controlla che il lead possa essere coperto dalla polizza obbligatoria.","Se cambi le regole puoi rivalutare le pratiche gi\u00e0 passate: nessun conteggio doppio, nessun messaggio inviato due volte."],g:'argoplus'},
+  {name:'Firma OTP',cap:'Firma integrata',title:"Firma OTP",desc:"Il cliente apre un link, vede logo e dati del mediatore, d\u00e0 il consenso e inserisce il codice ricevuto in chat. Il PDF finisce nel fascicolo.",steps:["Firma integrata: nessun fornitore esterno da acquistare o collegare.","Link protetto e a tempo, con limiti sui tentativi e sui reinvii del codice.","Contratto conforme alla struttura della delega prevista dal D.P.R. 180.","Ogni firma conserva IP, dispositivo e data, allegati al documento.","Invio PEC dalla casella certificata del mediatore, con tentativi automatici in caso di errore."],g:'otp'},
+  {name:'Database automatizzato',cap:'Dati ordinati',title:"Un database automatizzato",desc:"Ogni lead genera documenti, conversazioni, cronologia e posizione nel funnel. Tutti questi dati vengono raccolti e ordinati in un'unica piattaforma.",steps:["L'importazione dei documenti pu\u00f2 essere singola o a blocchi.","I numeri di telefono duplicati vengono riconosciuti: ogni risposta arriva alla persona giusta.","Ogni step \u00e8 automatico e visibile: consensi, avvio funnel, lead gestiti, ed eventuali segnalazioni."],g:'db'},
+  {name:'Campagne',cap:'Invii conformi',title:"Comunicazioni che rispettano le regole",desc:"Scegli il pubblico, scegli un modello approvato e invia. Chi non ha dato il consenso, chi non ha un numero valido o chi \u00e8 associato a un modello non approvato viene escluso, e vedi il motivo, lead per lead.",steps:["Viene fatta una stima approssimativa di chi ricever\u00e0 il messaggio e chi invece non lo ricever\u00e0, in base alle interazioni passate con i lead."],g:'camp'}
+ ];
+ var pad=function(n){return (n<10?'0':'')+n};
+ /* ---- isometria ---- */
+ var OX=280,OY=120,C=.866,S=.5;
+ function P(x,y,z){return [(OX+(x-y)*C).toFixed(1),(OY+(x+y)*S-z).toFixed(1)]}
+ function poly(pts,cls){return '<path class="'+cls+'" d="M'+pts.map(function(p){return p.join(' ')}).join('L')+'Z"/>'}
+ function box(x,y,z,w,d,h,hi){var t=[P(x,y,z+h),P(x+w,y,z+h),P(x+w,y+d,z+h),P(x,y+d,z+h)],l=[P(x,y+d,z),P(x+w,y+d,z),P(x+w,y+d,z+h),P(x,y+d,z+h)],r=[P(x+w,y,z),P(x+w,y+d,z),P(x+w,y+d,z+h),P(x+w,y,z+h)];
+  return '<g class="'+(hi?'hi':'')+'">'+poly(t,'ft fill')+poly(l,'fl fill')+poly(r,'fr fill')+poly(t,'st draw')+poly(l,'st draw')+poly(r,'st draw')+'</g>'}
+ function grid(n,step,z){var h='';for(var i=0;i<=n;i++){var a=P(i*step,0,z),b=P(i*step,n*step,z),c=P(0,i*step,z),d=P(n*step,i*step,z);h+='<path class="grid" d="M'+a.join(' ')+'L'+b.join(' ')+'"/><path class="grid" d="M'+c.join(' ')+'L'+d.join(' ')+'"/>'}return h}
+ function label(x,y,z,tx,ty,n,txt,anchor){var a=P(x,y,z);return '<path class="lead" d="M'+a.join(' ')+'L'+tx+' '+ty+'"/><circle class="lead" cx="'+a[0]+'" cy="'+a[1]+'" r="2"/><text class="lab" x="'+tx+'" y="'+(ty-4)+'" text-anchor="'+(anchor||'start')+'"><tspan>'+(n?n+' ':'')+'</tspan><tspan>'+txt+'</tspan></text>'}
+ function line(a,b,cls){return '<path class="'+(cls||'st draw')+'" d="M'+a.join(' ')+'L'+b.join(' ')+'"/>'}
+ var G={
+  inbox:function(){var h=grid(6,40,0)+box(20,20,0,200,200,10);
+   h+=box(30,150,10,22,40,4)+box(70,180,10,22,40,4)+box(120,190,10,22,40,4);           /* telefoni / canali */
+   h+=box(95,85,10,60,60,34,true);                                                       /* casella condivisa */
+   h+=line(P(41,170,14),P(110,120,30))+line(P(81,200,14),P(120,130,30))+line(P(131,210,14),P(135,140,30));
+   h+=box(160,40,10,26,26,12)+box(195,40,10,26,26,12)+box(160,75,10,26,26,12);           /* team */
+   h+=label(41,150,14,60,300,'01','WhatsApp')+label(120,190,14,120,335,'02','Email')+label(200,40,22,470,110,'03','Team','end')+label(125,85,44,440,40,'','Casella condivisa','end');
+   return h},
+  agent:function(){var h=grid(6,40,0)+box(20,20,0,200,200,10);
+   h+=box(95,95,10,50,50,50,true);                                                       /* agente */
+   var r=[[40,40],[180,40],[200,120],[160,200],[60,200],[30,120]];r.forEach(function(q){h+=box(q[0],q[1],10,22,30,4);h+=line(P(q[0]+11,q[1]+15,14),P(120,120,40))});
+   h+=box(230,90,0,30,30,60);h+=line(P(145,120,40),P(230,105,30),'st draw')+'<path class="st draw" d="M'+P(224,101,34).join(' ')+'L'+P(230,105,30).join(' ')+'L'+P(226,111,26).join(' ')+'"/>';
+   h+=label(120,95,60,60,40,'01','Agente AI')+label(180,40,14,470,60,'02','Documenti','end')+label(245,90,60,470,300,'03','Operatore','end');
+   return h},
+  argo:function(){var h=grid(6,40,0)+box(20,20,0,200,200,10);
+   h+=box(60,60,10,90,120,3);                                                            /* documento */
+   h+='<path class="scan" d="M'+P(60,110,16).join(' ')+'L'+P(150,110,16).join(' ')+'"/>';
+   h+=line(P(70,75,13),P(140,75,13),'st draw')+line(P(70,90,13),P(120,90,13),'st draw')+line(P(70,130,13),P(140,130,13),'st draw')+line(P(70,145,13),P(110,145,13),'st draw');
+   [0,1,2,3,4].forEach(function(i){h+=box(170,40+i*32,10,26,22,10,true);h+=line(P(150,90,14),P(170,51+i*32,20))});
+   h+=label(60,60,13,60,40,'01','Busta paga / OBIS M / CU')+label(196,168,20,470,320,'02','Dati estratti','end')+label(105,110,16,110,330,'','Scansione');
+   return h},
+  argoplus:function(){var h=grid(6,40,0);
+   h+=box(30,30,0,180,180,10)+box(45,45,24,150,150,10)+box(60,60,48,120,120,10);          /* CTC / CRIF / Assicurativa */
+   h+=box(95,95,72,50,50,36,true);                                                       /* verdetto */
+   h+=label(30,120,10,60,335,'01','Verifica CTC')+label(45,45,34,60,70,'02','Verifica CRIF')+label(180,60,58,470,80,'03','Verifica assicurativa','end')+label(145,120,108,470,20,'','Verdetto motivato','end');
+   var v=['idoneo','da rivedere','non idoneo'];v.forEach(function(t,i){h+='<rect class="st fill" x="'+(340+i*0)+'" y="'+(300+i*22)+'" width="120" height="16" rx="8"/><text class="lab" x="400" y="'+(311+i*22)+'" text-anchor="middle">'+t+'</text>'});
+   return h},
+  otp:function(){var h=grid(6,40,0)+box(20,20,0,200,200,10);
+   h+=box(40,110,10,50,90,6);                                                            /* telefono */
+   var q=P(65,155,16);h+='<text class="otp fill" x="'+q[0]+'" y="'+(+q[1]+4)+'" text-anchor="middle" transform="rotate(-30 '+q[0]+' '+q[1]+')">4821</text>';
+   h+=box(115,105,10,30,30,30,true);                                                     /* lucchetto */
+   h+='<path class="st draw" d="M'+P(122,120,40).join(' ')+' C'+P(122,120,62).join(' ')+' '+P(138,120,62).join(' ')+' '+P(138,120,40).join(' ')+'"/>';
+   h+=box(150,40,10,60,80,3);h+=line(P(158,55,13),P(202,55,13),'st draw')+line(P(158,70,13),P(190,70,13),'st draw')+line(P(158,85,13),P(202,85,13),'st draw');
+   h+=line(P(145,120,25),P(150,80,13),'st draw');
+   h+=label(65,110,16,60,300,'01','Link e codice OTP')+label(130,105,40,60,60,'02','Firma protetta')+label(210,40,13,470,60,'03','PDF nel fascicolo','end')+label(180,120,13,470,330,'','Invio PEC','end');
+   return h},
+  db:function(){var h=grid(7,32,0);var hi={'1,1':1,'2,1':1,'1,2':1};
+   for(var i=0;i<5;i++)for(var j=0;j<5;j++){var x=30+i*40,y=30+j*40;h+=box(x,y,0,28,28,hi[i+','+j]?26:10,!!hi[i+','+j])}
+   h+=box(235,60,0,40,40,90);h+=line(P(255,80,90),P(255,80,116),'st draw')+'<ellipse class="st draw" cx="'+P(255,80,116)[0]+'" cy="'+P(255,80,116)[1]+'" rx="34" ry="17"/>';
+   h+=label(44,44,26,60,60,'01','Importazione a blocchi')+label(110,190,10,80,335,'02','Duplicati riconosciuti')+label(275,60,116,470,60,'03','Database','end');
+   return h},
+  camp:function(){var h=grid(6,40,0)+box(20,20,0,200,200,10);
+   h+=box(105,105,10,30,30,80,true);var c=P(120,120,90);
+   h+='<g style="transform-origin:'+c[0]+'px '+c[1]+'px"><ellipse class="wave" cx="'+c[0]+'" cy="'+c[1]+'" rx="120" ry="60"/><ellipse class="wave" cx="'+c[0]+'" cy="'+c[1]+'" rx="120" ry="60"/><ellipse class="wave" cx="'+c[0]+'" cy="'+c[1]+'" rx="120" ry="60"/></g>';
+   var k=0;for(var i=0;i<5;i++)for(var j=0;j<5;j++){if(i>=2&&i<=3&&j>=2&&j<=3)continue;var q=P(40+i*40,40+j*40,12),off=(k%4===1);k++;
+     if(off){h+='<circle class="dot off fill" cx="'+q[0]+'" cy="'+q[1]+'" r="4"/><path class="ex fill" d="M'+(q[0]-3)+' '+(q[1]-3)+'L'+(+q[0]+3)+' '+(+q[1]+3)+'M'+(+q[0]+3)+' '+(q[1]-3)+'L'+(q[0]-3)+' '+(+q[1]+3)+'"/>'}else h+='<circle class="dot fill" cx="'+q[0]+'" cy="'+q[1]+'" r="3.5"/>'}
+   h+=label(120,120,90,470,40,'01','Modello approvato','end')+label(40,40,12,60,60,'02','Pubblico')+label(200,200,12,470,330,'03','Esclusi, con motivo','end');
+   return h}
+ };
+ F.forEach(function(f,i){var sec=document.createElement('section');sec.className='f4-sec';sec.setAttribute('data-i',i);
+  sec.innerHTML='<div class="f4-graphic"><svg viewBox="0 0 560 380" aria-hidden="true">'+G[f.g]()+'</svg><p class="f4-caption">'+f.name+' &middot; '+f.cap+'</p></div>'
+   +'<div class="f4-node"><div class="f4-diamond"><span>'+pad(i+1)+'</span></div></div>'
+   +'<div class="f4-text"><p class="f4-n">'+pad(i+1)+' / '+pad(F.length)+'</p><h3>'+f.title+'</h3><p class="f4-desc">'+f.desc+'</p><ul class="f4-list">'+f.steps.map(function(t){return '<li><span>'+t+'</span></li>'}).join('')+'</ul><button class="f4-try" type="button">Prova '+f.name+' <span aria-hidden="true">&rarr;</span></button></div>';
+  sec.querySelector('.f4-try').addEventListener('click',function(){close();var d=document.getElementById('book-demo');if(d)d.click()});
+  host.appendChild(sec)});
+ /* lunghezze dei tratti per il disegno progressivo */
+ function measure(){host.querySelectorAll('.draw').forEach(function(el){try{var L=el.getTotalLength();el.style.setProperty('--l',Math.ceil(L))}catch(x){}})}
+ var io=null;function observe(){if(io)io.disconnect();io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('is-in')})},{root:scr,threshold:.28});host.querySelectorAll('.f4-sec').forEach(function(x){io.observe(x)})}
+ function spine(){var wrap=document.getElementById('f4-wrap'),h=wrap.scrollHeight,vh=scr.clientHeight,y=scr.scrollTop+vh*.5;var pct=Math.max(0,Math.min(100,(y-wrap.offsetTop)/h*100));wrap.style.setProperty('--f4-prog',pct+'%')}
+ scr.addEventListener('scroll',spine,{passive:true});
+ function setTop(){var hd=document.querySelector('.top');if(hd)scr.style.setProperty('--f4-top',hd.offsetHeight+'px')}
+ function open(){if(scr.classList.contains('is-open'))return;
+  try{if(window.__whyClose)window.__whyClose()}catch(x){}
+  try{if(window.__fnClose)window.__fnClose()}catch(x){}
+  try{if(window.__fn2Close)window.__fn2Close()}catch(x){}
+  try{if(window.__fn3Close)window.__fn3Close()}catch(x){}
+  try{if(typeof closePricing==='function')closePricing()}catch(x){}
+  try{if(typeof stopAuto==='function')stopAuto()}catch(x){}
+  setTop();scr.hidden=false;scr.setAttribute('aria-hidden','false');scr.classList.add('is-open');scr.scrollTop=0;document.body.classList.add('why-open','fn4-open');btn.setAttribute('aria-pressed','true');
+  host.querySelectorAll('.f4-sec').forEach(function(x){x.classList.remove('is-in')});
+  requestAnimationFrame(function(){measure();observe();spine();var m=/f4scroll=(\d+)/.exec(location.search);if(m)scr.scrollTop=+m[1]})}
+ function close(){if(!scr.classList.contains('is-open'))return;if(io)io.disconnect();scr.classList.remove('is-open');scr.hidden=true;scr.setAttribute('aria-hidden','true');document.body.classList.remove('why-open','fn4-open');btn.setAttribute('aria-pressed','false')}
+ window.__fn4Open=open;window.__fn4Close=close;
+ btn.addEventListener('click',function(){open()});
+ ['home-btn','brand-home','book-demo','final-pricing','why-btn','fn-btn','fn2-btn','fn3-btn'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('click',close,true)});
+ addEventListener('keydown',function(e){if(scr.classList.contains('is-open')&&e.key==='Escape')close()});
+ addEventListener('resize',function(){if(scr.classList.contains('is-open')){setTop();spine()}});
+ if(location.hash==='#funzioni2')setTimeout(open,50);
+ addEventListener('hashchange',function(){if(location.hash==='#funzioni2')open()});
+})();
+</script>
+<script>
+/* v114 — chiusura reciproca con la nuova Funzioni2 */
+(function(){var b=document.getElementById('fn4-btn');if(!b)return;b.addEventListener('click',function(){['__whyClose','__fnClose','__fn2Close','__fn3Close'].forEach(function(k){try{if(window[k])window[k]()}catch(x){}})},true);})();
+</script>

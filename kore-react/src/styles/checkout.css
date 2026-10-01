@@ -1,0 +1,206 @@
+/* Tema della schermata Prezzo: fondo viola pieno, testo bianco.
+ * I valori vengono dalle classi ps- e pc- di index.html, non inventati:
+ * bianco a piena opacita' per i titoli, .82 per il testo, .66/.74 per le
+ * diciture minori, bordi a rgba(255,255,255,.3), raggi 16-24px,
+ * bottone principale bianco con testo viola. */
+
+.co{
+  --co-viola:#6315e8;
+  --co-bordo:rgba(255,255,255,.30);
+  --co-bordo-forte:rgba(255,255,255,.42);
+  --co-testo:rgba(255,255,255,.82);
+  --co-lieve:rgba(255,255,255,.66);
+  min-height:100svh;   /* niente intestazione sopra: la pagina e' tutta sua */
+  background:var(--co-viola); color:#fff;
+  font-family:'DM Mono',ui-monospace,monospace; font-weight:400;
+  padding:clamp(26px,4vw,52px) 6.25% clamp(60px,8vw,110px);
+}
+.co *{box-sizing:border-box}
+
+/* ---------- marchio ---------- */
+.co-marchio{
+  display:inline-flex; color:#fff; margin:0 0 26px;
+  opacity:.92; transition:opacity .18s;
+}
+.co-marchio:hover{opacity:1}
+.co-marchio svg{display:block}
+
+/* ---------- avviso: non e' il sito vero ---------- */
+.co-avviso{
+  display:flex; gap:12px; align-items:flex-start;
+  border:1px dashed rgba(255,255,255,.5); border-radius:16px;
+  padding:13px 18px; margin-bottom:30px;
+  font-size:11.5px; line-height:1.7; color:#fff;
+  background:rgba(0,0,0,.16);
+}
+.co-avviso b{font-weight:500}
+
+/* ---------- intestazione e passi ---------- */
+.co-back{
+  border:1px solid var(--co-bordo-forte); background:transparent; color:#fff;
+  border-radius:24px; padding:12px 22px; font:inherit; font-size:11px;
+  display:inline-flex; gap:14px; align-items:center; cursor:pointer;
+}
+.co-back:hover{background:rgba(255,255,255,.1)}
+
+.co-passi{display:flex; flex-wrap:wrap; gap:8px; margin:26px 0 34px}
+.co-passo{
+  display:flex; align-items:center; gap:9px;
+  border:1px solid var(--co-bordo); border-radius:40px;
+  padding:8px 16px; font-size:11px; color:var(--co-lieve);
+}
+.co-passo i{
+  width:18px;height:18px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--co-bordo); font-size:9px; font-style:normal;
+}
+.co-passo.is-on{color:#fff;border-color:#fff}
+.co-passo.is-on i{background:#fff;color:var(--co-viola);border-color:#fff}
+.co-passo.is-done i{background:rgba(255,255,255,.28);color:#fff}
+
+/* misure prese dalla pagina Prezzo: 48px a 1500px di larghezza,
+   interlinea piena, spaziatura -.05em */
+.co-h{font-size:clamp(30px,3.2vw,60px);font-weight:400;letter-spacing:-.05em;margin:0 0 10px;line-height:1}
+.co-sub{margin:0 0 34px;font-size:12.5px;line-height:1.85;color:var(--co-testo);max-width:560px}
+.co-eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--co-lieve);margin:0 0 14px}
+
+/* ---------- impaginazione a due colonne ---------- */
+.co-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);gap:clamp(28px,5vw,72px);align-items:start}
+.co-box{border:1px solid var(--co-bordo);border-radius:20px;padding:clamp(20px,2.5vw,30px)}
+.co-box + .co-box{margin-top:18px}
+.co-riepilogo{position:sticky;top:18px}
+
+/* ---------- configuratore ---------- */
+.co-lead-n{display:flex;align-items:baseline;gap:16px}
+.co-lead-n input{
+  width:170px;font:inherit;font-size:clamp(30px,3.4vw,46px);color:#fff;
+  background:transparent;border:0;border-bottom:1px solid var(--co-bordo-forte);
+  padding:0 0 6px;outline:none;font-variant-numeric:tabular-nums;
+}
+.co-lead-n input:focus{border-bottom-color:#fff}
+.co-lead-n span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--co-lieve)}
+.co-range{-webkit-appearance:none;appearance:none;width:100%;height:2px;margin:26px 0 8px;
+  background:rgba(255,255,255,.35);outline:none}
+.co-range::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:#fff;cursor:pointer;box-shadow:0 0 0 6px rgba(255,255,255,.18);border:0}
+.co-range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:0;cursor:pointer}
+.co-limiti{display:flex;justify-content:space-between;font-size:10px;color:var(--co-lieve)}
+
+.co-motori{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:8px}
+.co-motore{
+  text-align:left;font:inherit;cursor:pointer;position:relative;
+  background:rgba(255,255,255,.07);border:1px solid var(--co-bordo);
+  border-radius:16px;padding:18px;color:#fff;
+  transition:background .18s,border-color .18s;
+}
+.co-motore:hover{background:rgba(255,255,255,.13)}
+.co-motore.is-on{background:#fff;color:var(--co-viola);border-color:#fff}
+.co-motore h4{margin:0 0 8px;font-size:15px;font-weight:400}
+.co-motore p{margin:0;font-size:11px;line-height:1.7;opacity:.8}
+.co-motore .co-prezzo-m{display:block;margin-top:12px;font-size:11px;opacity:.75}
+.co-motore .co-fisso{position:absolute;top:12px;right:12px;font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.7}
+
+/* ---------- riepilogo prezzo ---------- */
+/* La cifra grande si misura sulla COLONNA, non sulla finestra.
+   Sulla pagina Prezzo "EUR 4,32" sta in una colonna larga; qui la stessa
+   riga puo' diventare "EUR 9.844,24", cioe' quasi il doppio dei caratteri,
+   dentro una colonna stretta: a misura fissa usciva dal riquadro.
+   Con le unita' di contenitore il numero si adatta a quanto spazio ha. */
+.co-riepilogo{container-type:inline-size}
+.co-tot{
+  font-size:clamp(34px,7vw,86px);        /* ripiego se il browser non sa le cqi */
+  font-size:clamp(34px,16cqi,86px);
+  font-weight:400;line-height:.9;letter-spacing:-.06em;
+  font-variant-numeric:tabular-nums;margin:0;
+  white-space:nowrap;                    /* un importo non si spezza mai a meta' */
+}
+.co-tot-sotto{margin:14px 0 0;font-size:12.5px;color:var(--co-testo)}
+.co-righe{margin:22px 0 0;border-top:1px solid var(--co-bordo);padding-top:16px}
+.co-riga{display:flex;justify-content:space-between;gap:16px;font-size:12px;
+  padding:7px 0;color:var(--co-testo)}
+.co-riga.tot{color:#fff;font-size:14px;border-top:1px solid var(--co-bordo);margin-top:8px;padding-top:14px}
+.co-riga b{font-weight:500;font-variant-numeric:tabular-nums}
+
+/* ---------- moduli ---------- */
+.co-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 22px}
+.co-campo{display:flex;flex-direction:column;gap:6px;margin:0}
+.co-campo.co-largo{grid-column:1/-1}
+.co-campo label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--co-lieve)}
+.co-campo input,.co-campo select,.co-campo textarea{
+  font:inherit;font-size:13px;color:#fff;background:transparent;
+  border:0;border-bottom:1px solid var(--co-bordo);padding:9px 0;outline:none;
+}
+.co-campo input:focus,.co-campo select:focus{border-bottom-color:#fff}
+.co-campo select option{color:#2a1b45}
+.co-campo [aria-invalid="true"]{border-bottom-color:#ffc9d6}
+.co-err{font-size:10.5px;color:#ffc9d6;min-height:1.2em;opacity:0;transition:opacity .2s}
+.co-err.is-on{opacity:1}
+.co-aiuto{font-size:10.5px;color:var(--co-lieve);margin:2px 0 0;line-height:1.6}
+
+/* ---------- bottoni ---------- */
+.co-azioni{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:34px}
+.co-cta{
+  background:#fff;color:var(--co-viola);border:0;border-radius:40px;
+  padding:16px 30px;font:inherit;font-size:13px;cursor:pointer;
+  display:inline-flex;gap:22px;align-items:center;
+}
+.co-cta:hover{transform:translateY(-1px)}
+.co-cta:disabled{opacity:.55;cursor:default;transform:none}
+.co-ghost{
+  background:transparent;color:#fff;border:1px solid var(--co-bordo-forte);
+  border-radius:40px;padding:15px 26px;font:inherit;font-size:12px;cursor:pointer;
+}
+.co-ghost:hover{background:rgba(255,255,255,.1)}
+
+/* ---------- contratto ---------- */
+.co-doc{
+  background:#fff;color:#2a2233;border-radius:18px;
+  padding:clamp(24px,3vw,42px);max-height:52vh;overflow-y:auto;
+  font-size:12px;line-height:1.85;
+}
+.co-doc h3{font-size:15px;font-weight:500;margin:22px 0 8px;color:var(--co-viola)}
+.co-doc h3:first-child{margin-top:0}
+.co-doc dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:0 0 6px}
+.co-doc dt{color:#6b5f7a}
+.co-doc dd{margin:0;font-weight:500}
+
+.co-firma{display:grid;gap:14px;margin-top:22px}
+.co-consenso{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;
+  font-size:11.5px;line-height:1.7;color:var(--co-testo)}
+.co-otp{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.co-otp input{
+  width:150px;font:inherit;font-size:20px;letter-spacing:.42em;color:#fff;
+  background:transparent;border:0;border-bottom:1px solid var(--co-bordo-forte);
+  padding:8px 0;outline:none;text-align:center;
+}
+
+/* ---------- pagamento ---------- */
+.co-metodi{display:grid;gap:14px}
+.co-metodo{
+  text-align:left;font:inherit;cursor:pointer;color:#fff;
+  background:rgba(255,255,255,.07);border:1px solid var(--co-bordo);
+  border-radius:16px;padding:18px 20px;display:grid;gap:6px;
+}
+.co-metodo.is-on{background:#fff;color:var(--co-viola);border-color:#fff}
+.co-metodo b{font-weight:500;font-size:14px}
+.co-metodo span{font-size:11px;line-height:1.7;opacity:.82}
+.co-metodo em{font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+
+/* ---------- conferma ---------- */
+.co-fatto{max-width:640px}
+.co-spunta{
+  width:54px;height:54px;border-radius:50%;background:#fff;color:var(--co-viola);
+  display:grid;place-items:center;font-size:26px;margin:0 0 22px;
+}
+
+/* ---------- schermi stretti ---------- */
+@media(max-width:900px){
+  .co-grid{grid-template-columns:1fr}
+  .co-riepilogo{position:static}
+  .co-form{grid-template-columns:1fr}
+  .co-doc{max-height:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .co-cta:hover{transform:none}
+  .co-err,.co-motore,.co-metodo{transition:none}
+}

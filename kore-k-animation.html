@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KORE — K animation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* KORE — la K che si costruisce su un piano tecnico e diventa il logo.
+   Standalone: copia lo <svg class="kore-k">, questo CSS e lo script in fondo.
+   Click sulla K = riparte. Tema scuro: aggiungi la classe "theme-dark" a <html>. */
+html,body{margin:0;height:100%}
+body{display:grid;place-items:center;background:#ece1fd;font-family:'DM Mono',monospace}
+html.theme-dark body{background:#15101d}
+.kore-k{width:min(92vw,560px);height:auto;display:block;cursor:pointer;overflow:visible}
+
+.ka-st{fill:none;stroke:#3d3646;stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.ka-grid{fill:none;stroke:rgba(61,54,70,.13);stroke-width:1;vector-effect:non-scaling-stroke}
+.ka-slot{fill:rgba(160,107,255,.16);stroke:#6315e8;stroke-width:1.4;stroke-dasharray:5 5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.ka-box{fill:none;stroke:#6315e8;stroke-width:1.2;stroke-dasharray:4 5;vector-effect:non-scaling-stroke}
+.ka-level{fill:none;stroke:#a06bff;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.ka-lead{fill:none;stroke:rgba(61,54,70,.5);stroke-width:1;vector-effect:non-scaling-stroke}
+.ka-lab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;fill:#6b5a83;text-transform:uppercase}
+.ka-lab .ka-n{fill:#6315e8}
+.ka-chip path{stroke:#2a1650;stroke-width:.9;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.ka-ct{fill:#a06bff}.ka-cl{fill:#6315e8}.ka-cr{fill:#4a0fb3}
+.ka-ring{fill:none;stroke:#6315e8;stroke-width:1.4;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.ka-logo{filter:drop-shadow(0 22px 34px rgba(99,21,232,.3))}
+html.theme-dark .ka-grid{stroke:rgba(205,187,233,.12)}
+html.theme-dark .ka-lead{stroke:rgba(205,187,233,.45)}
+html.theme-dark .ka-lab{fill:#a996c9}
+html.theme-dark .ka-lab .ka-n{fill:#a06bff}
+</style>
+</head>
+<body>
+
+<svg class="kore-k" id="kk-stage" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet" role="img" aria-label="La K di KORE si costruisce su un piano tecnico e diventa il logo">
+ <defs><linearGradient id="kk-grad" gradientUnits="userSpaceOnUse" x1="324" y1="125" x2="880" y2="640"><stop offset="0" stop-color="#6917f3"/><stop offset=".6" stop-color="#6519f2"/><stop offset="1" stop-color="#7233f6"/></linearGradient></defs>
+ <g id="kk-floor"></g><g id="kk-plate"></g><g id="kk-guides"></g><g id="kk-solid"></g><g id="kk-fx"></g><g id="kk-chips"></g><g id="kk-labels"></g><g id="kk-logo" class="ka-logo"></g>
+</svg>
+
+<script>
+/* KoreK(prefix): costruisce l'animazione dentro lo <svg id="<prefix>-stage">.
+   Restituisce {play, stop, seek(t)}. Durata totale: 9,2 secondi.
+   Fasi: griglia 0-1.4s · base 0.5-1.7 · contorno K 1.2-2.8 · estrusione 2.7-3.7 ·
+   5 tessere che caricano la K 3.5-5.3 · il triangolo cade a incastro 5.5-6.15 ·
+   la scena sparisce 6.2-6.8 · la K si gira e diventa il logo piatto 6.6-8.0 */
+function KoreK(pfx){
+ var stage=document.getElementById(pfx+'-stage');if(!stage)return null;
+ var T={grid:[0,1.4],plate:[.5,1.7],box:[1.0,1.5,3.3,3.8],outline:[1.2,2.8],labels:[2.4,2.9,5.9,6.4],
+        extrude:[2.7,3.7],chips:[3.5,.25,.8],drop:[5.5,6.15],fadeScene:[6.2,6.8],turn:[6.6,8.0],end:9.2};
+ var NCHIP=5,DEPTH=58;
+ var sh=function(p){return [p[0]-39,p[1]-44]};
+ var BODY=[[1146,45],[1863,45],[1041,883],[2006,1837],[1164,1837],[630,1306],[39,1894],[40,1127]].map(sh);
+ var TRI=[[43,44],[722,44],[43,714]].map(sh);
+ var UM=1967,VM=1850;
+ var C=.866,S=.5,OX=484,OY=470,SC=.17,YF=40,FX=324,FY=122,KF=.2806;
+ var q=0,ext=0;
+ function W(x,y,z){return [OX+(x-y)*C,OY+(x+y)*S-z]}
+ function pr(u,v,back,dz){var x=u*SC,z=(VM-v)*SC+(dz||0),y=YF-(back?DEPTH*ext:0),a=W(x,y,z);
+  return [a[0]*(1-q)+(FX+u*KF)*q,a[1]*(1-q)+(FY+v*KF-(dz||0))*q]}
+ var NS='http://www.w3.org/2000/svg',E=function(id){return document.getElementById(pfx+'-'+id)};
+ function clamp(v,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.min(b,Math.max(a,v))}
+ function ramp(t,a,b){return clamp((t-a)/(b-a))}
+ function io(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2}
+ function out(p){return 1-Math.pow(1-p,3)}
+ function outBack(p){var c=1.1;p-=1;return 1+(c+1)*p*p*p+c*p*p}
+ function inOutFade(t,w){return ramp(t,w[0],w[1])*(1-ramp(t,w[2],w[3]))}
+ function mixc(a,b,t){return a.map(function(v,i){return v+(b[i]-v)*t})}
+ function rgba(c){return 'rgba('+Math.round(c[0])+','+Math.round(c[1])+','+Math.round(c[2])+','+c[3].toFixed(3)+')'}
+ function dstr(pts){return 'M'+pts.map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1)}).join('L')+'Z'}
+ function el(tag,cls,parent){var n=document.createElementNS(NS,tag);if(cls)n.setAttribute('class',cls);parent.appendChild(n);return n}
+ /* colori: spento -> acceso; in tema scuro cambiano solo i toni neutri */
+ var COL={front:[[255,255,255,.88],[99,21,232,1]],top:[[255,255,255,.72],[160,107,255,1]],side:[[99,21,232,.10],[74,15,179,1]]};
+ var STROKE=[[61,54,70,1],[42,22,80,1]],PLATE={top:'rgba(255,255,255,.5)',front:'rgba(99,21,232,.16)',side:'rgba(99,21,232,.08)'};
+ function theme(){var d=document.documentElement.classList.contains('theme-dark');
+  COL.front[0]=d?[29,22,39,.92]:[255,255,255,.88];
+  COL.top[0]=d?[47,37,63,.9]:[255,255,255,.72];
+  COL.side[0]=d?[99,21,232,.2]:[99,21,232,.10];
+  STROKE[0]=d?[205,187,233,1]:[61,54,70,1];
+  STROKE[1]=d?[201,179,255,1]:[42,22,80,1];
+  PLATE.top=d?'rgba(255,255,255,.07)':'rgba(255,255,255,.5)';
+  PLATE.front=d?'rgba(99,21,232,.26)':'rgba(99,21,232,.16)';
+  PLATE.side=d?'rgba(99,21,232,.16)':'rgba(99,21,232,.08)'}
+ function walls(poly){var o=[],i;
+  for(i=0;i<poly.length;i++){var a=poly[i],b=poly[(i+1)%poly.length],du=b[0]-a[0],dv=b[1]-a[1],l=Math.hypot(du,dv),nu=dv/l,nv=-du/l;
+   if(nu-nv>.08)o.push({a:a,b:b,kind:(nv<-.9?'top':'side'),h:1-((a[1]+b[1])/2)/VM})}
+  return o}
+ function below(poly,vc){var o=[],i;
+  for(i=0;i<poly.length;i++){var a=poly[i],b=poly[(i+1)%poly.length],ia=a[1]>=vc,ib=b[1]>=vc;
+   if(ia)o.push(a);
+   if(ia!==ib){var k=(vc-a[1])/(b[1]-a[1]);o.push([a[0]+(b[0]-a[0])*k,vc])}}
+  return o}
+ function chipPath(g,p,w){var x=p[0],k=w*.577,t=w*.45,y=p[1]-t/2,f=function(n){return n.toFixed(1)};
+  g.children[0].setAttribute('d','M'+f(x-w)+' '+f(y)+'L'+f(x)+' '+f(y+k)+'L'+f(x)+' '+f(y+k+t)+'L'+f(x-w)+' '+f(y+t)+'Z');
+  g.children[1].setAttribute('d','M'+f(x+w)+' '+f(y)+'L'+f(x)+' '+f(y+k)+'L'+f(x)+' '+f(y+k+t)+'L'+f(x+w)+' '+f(y+t)+'Z');
+  g.children[2].setAttribute('d','M'+f(x-w)+' '+f(y)+'L'+f(x)+' '+f(y-k)+'L'+f(x+w)+' '+f(y)+'L'+f(x)+' '+f(y+k)+'Z')}
+ var floor=E('floor'),plate=E('plate'),guides=E('guides'),solid=E('solid'),fx=E('fx'),
+     chipsG=E('chips'),labels=E('labels'),logo=E('logo');
+ var GL=[],i,x,y;
+ (function(){var st=56,x0=-224,x1=560,y0=-252,y1=308,z=-12,n=0;
+  for(x=x0;x<=x1;x+=st){GL.push({a:W(x,y0,z),b:W(x,y1,z),n:el('path','ka-grid',floor),i:n++})}
+  n=0;for(y=y0;y<=y1;y+=st){GL.push({a:W(x0,y,z),b:W(x1,y,z),n:el('path','ka-grid',floor),i:n++})}})();
+ var PB={x:-46,y:-64,w:428,d:196,z:-12,h:12};
+ var pf=['top','front','side'].map(function(k){return {k:k,fill:el('path','',plate),line:el('path','ka-st',plate)}});
+ pf.forEach(function(f){f.line.setAttribute('pathLength','1');f.line.setAttribute('stroke-dasharray','1')});
+ var bbox=el('path','ka-box',guides);
+ function makeSolid(poly){var g=el('g','',solid),w=walls(poly).map(function(x){x.n=el('path','ka-st',g);return x});
+  var face=el('path','',g),charge=el('path','',g),line=el('path','ka-st',g);
+  line.setAttribute('pathLength','1');line.setAttribute('stroke-dasharray','1');
+  return {poly:poly,g:g,w:w,face:face,charge:charge,line:line}}
+ var body=makeSolid(BODY),slot=el('path','ka-slot',solid),tri=makeSolid(TRI);
+ var level=el('path','ka-level',fx),ring=el('path','ka-ring',fx),chips=[];
+ for(i=0;i<NCHIP;i++){var g=el('g','ka-chip',chipsG);el('path','ka-cl',g);el('path','ka-cr',g);el('path','ka-ct',g);chips.push(g)}
+ var LB=[{u:1500,v:230,tx:905,ty:196,n:'01',txt:'KORE',anchor:'start'},{u:1002,v:839,tx:905,ty:452,n:'02',txt:'45°',anchor:'start'}].map(function(o){
+  var g=el('g','',labels);o.g=g;o.l=el('path','ka-lead',g);o.c=el('circle','ka-lead',g);o.c.setAttribute('r','2.4');
+  var tx=el('text','ka-lab',g);tx.setAttribute('x',o.tx);tx.setAttribute('y',o.ty-6);tx.setAttribute('text-anchor',o.anchor);
+  var a=el('tspan','ka-n',tx);a.textContent=o.n+' ';var b=el('tspan','',tx);b.textContent=o.txt;return o});
+ var lg=[BODY,TRI].map(function(pp){var n=el('path','',logo);n.setAttribute('fill','url(#'+pfx+'-grad)');return {p:pp,n:n}});
+ var ROUTES=[[[-260,96],[22,96],[22,52]],[[600,96],[300,96],[300,52]],[[-260,96],[22,96],[22,52]],[[600,96],[300,96],[300,52]],[[-260,96],[22,96],[22,52]]];
+ function along(r,p){var l1=Math.hypot(r[1][0]-r[0][0],r[1][1]-r[0][1]),l2=Math.hypot(r[2][0]-r[1][0],r[2][1]-r[1][1]),d=p*(l1+l2);
+  if(d<l1){var k=d/l1;return [r[0][0]+(r[1][0]-r[0][0])*k,r[0][1]+(r[1][1]-r[0][1])*k]}
+  var k2=(d-l1)/l2;return [r[1][0]+(r[2][0]-r[1][0])*k2,r[1][1]+(r[2][1]-r[1][1])*k2]}
+ function drawSolid(s,t,lvl,dz,isBody){
+  var od=isBody?io(ramp(t,T.outline[0],T.outline[1])):1;
+  var faceIn=isBody?ramp(t,T.extrude[0]-.1,T.extrude[0]+.5):1;
+  var strokeMix=isBody?lvl:1,lineOp=1-ramp(q,.3,.9);
+  var F=s.poly.map(function(p){return pr(p[0],p[1],0,dz)}),d=dstr(F);
+  s.w.forEach(function(w){
+   var c=mixc(COL[w.kind][0],COL[w.kind][1],isBody?clamp((lvl*1.12-w.h)*9):1);
+   w.n.setAttribute('d',dstr([pr(w.a[0],w.a[1],0,dz),pr(w.b[0],w.b[1],0,dz),pr(w.b[0],w.b[1],1,dz),pr(w.a[0],w.a[1],1,dz)]));
+   w.n.style.fill=rgba(c);w.n.style.stroke=rgba(mixc(STROKE[0],STROKE[1],strokeMix));w.n.style.opacity=(ext>.01?1:0)*lineOp});
+  s.face.setAttribute('d',d);s.face.style.fill=rgba(COL.front[0]);s.face.style.opacity=faceIn*(isBody?1:0);
+  var cut=isBody?below(s.poly,VM*(1-lvl)):s.poly;
+  if(cut.length>2&&lvl>0){s.charge.setAttribute('d',dstr(cut.map(function(p){return pr(p[0],p[1],0,dz)})));s.charge.style.opacity=1}else s.charge.style.opacity=0;
+  s.charge.style.fill=rgba(COL.front[1]);
+  s.line.setAttribute('d',d);s.line.setAttribute('stroke-dashoffset',(1-od).toFixed(4));
+  s.line.style.stroke=rgba(mixc(STROKE[0],STROKE[1],strokeMix));s.line.style.opacity=lineOp}
+ function render(t){
+  theme();
+  q=io(ramp(t,T.turn[0],T.turn[1]));
+  ext=io(ramp(t,T.extrude[0],T.extrude[1]))*(1-q);
+  var scene=1-ramp(t,T.fadeScene[0],T.fadeScene[1]);
+  floor.style.opacity=scene;
+  GL.forEach(function(g){var p=out(ramp(t,T.grid[0]+g.i*.035,T.grid[0]+g.i*.035+.8));
+   g.n.setAttribute('d','M'+g.a[0].toFixed(1)+' '+g.a[1].toFixed(1)+'L'+(g.a[0]+(g.b[0]-g.a[0])*p).toFixed(1)+' '+(g.a[1]+(g.b[1]-g.a[1])*p).toFixed(1))});
+  plate.style.opacity=scene;
+  (function(){var b=PB,z1=b.z+b.h,pd=io(ramp(t,T.plate[0],T.plate[1])),pfill=ramp(t,T.plate[1]-.4,T.plate[1]+.3);
+   var pts={top:[W(b.x,b.y,z1),W(b.x+b.w,b.y,z1),W(b.x+b.w,b.y+b.d,z1),W(b.x,b.y+b.d,z1)],
+    front:[W(b.x,b.y+b.d,b.z),W(b.x+b.w,b.y+b.d,b.z),W(b.x+b.w,b.y+b.d,z1),W(b.x,b.y+b.d,z1)],
+    side:[W(b.x+b.w,b.y,b.z),W(b.x+b.w,b.y+b.d,b.z),W(b.x+b.w,b.y+b.d,z1),W(b.x+b.w,b.y,z1)]};
+   pf.forEach(function(f){var d=dstr(pts[f.k]);f.fill.setAttribute('d',d);f.fill.setAttribute('fill',PLATE[f.k]);f.fill.style.opacity=pfill;
+    f.line.setAttribute('d',d);f.line.setAttribute('stroke-dashoffset',(1-pd).toFixed(4))})})();
+  bbox.setAttribute('d',dstr([pr(0,0),pr(UM,0),pr(UM,VM),pr(0,VM)]));
+  bbox.style.opacity=inOutFade(t,T.box)*.8;
+  var lvl=0,n;
+  for(n=0;n<NCHIP;n++){var t0=T.chips[0]+n*T.chips[1],pp=ramp(t,t0,t0+T.chips[2]),gg=chips[n];
+   lvl+=out(ramp(t,t0+T.chips[2]-.05,t0+T.chips[2]+.45))/NCHIP;
+   var vis=clamp(pp*8)*clamp((1-pp)*8)*scene;gg.style.opacity=vis;
+   if(vis>0){var xy=along(ROUTES[n],io(pp));chipPath(gg,W(xy[0],xy[1],0),11)}}
+  var vc=VM*(1-lvl);
+  drawSolid(body,t,lvl,0,1);
+  if(lvl>0&&lvl<1){var cut=below(BODY,vc).filter(function(p){return Math.abs(p[1]-vc)<.01}).sort(function(a,b){return a[0]-b[0]});
+   var d='',k;for(k=0;k+1<cut.length;k+=2){var a=pr(cut[k][0],vc),b=pr(cut[k+1][0],vc);d+='M'+a[0].toFixed(1)+' '+a[1].toFixed(1)+'L'+b[0].toFixed(1)+' '+b[1].toFixed(1)}
+   level.setAttribute('d',d);level.style.opacity=1}else level.style.opacity=0;
+  var dp=ramp(t,T.drop[0],T.drop[1]),dz=(1-outBack(dp))*190;
+  slot.setAttribute('d',dstr(TRI.map(function(p){return pr(p[0],p[1])})));
+  slot.style.opacity=ramp(t,T.outline[0]+.5,T.outline[1])*(1-ramp(t,T.drop[1]-.15,T.drop[1]+.1));
+  tri.g.style.opacity=clamp(dp*5);
+  drawSolid(tri,99,1,dz,0);
+  (function(){var rp=ramp(t,T.drop[1]-.12,T.drop[1]+.6),cx=(TRI[0][0]+TRI[1][0]+TRI[2][0])/3,cy=(TRI[0][1]+TRI[1][1]+TRI[2][1])/3,sc=1+.42*out(rp);
+   ring.setAttribute('d',dstr(TRI.map(function(p){return pr(cx+(p[0]-cx)*sc,cy+(p[1]-cy)*sc)})));
+   ring.style.opacity=(rp>0&&rp<1)?(1-rp)*.9*scene:0})();
+  var lo=inOutFade(t,T.labels);
+  LB.forEach(function(o){var a=pr(o.u,o.v);o.g.style.opacity=lo;
+   o.l.setAttribute('d','M'+a[0].toFixed(1)+' '+a[1].toFixed(1)+'L'+o.tx+' '+o.ty);
+   o.c.setAttribute('cx',a[0].toFixed(1));o.c.setAttribute('cy',a[1].toFixed(1))});
+  logo.style.opacity=ramp(q,.35,1);
+  lg.forEach(function(o){o.n.setAttribute('d',dstr(o.p.map(function(p){return pr(p[0],p[1])})))});
+  solid.style.opacity=1-ramp(q,.92,1)}
+ var t=0,prev=0,raf=0,reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ function loop(now){var dt=Math.min(.05,(now-prev)/1000||0);prev=now;t=Math.min(T.end,t+dt);render(t);
+  if(t<T.end)raf=requestAnimationFrame(loop);else raf=0}
+ function play(){cancelAnimationFrame(raf);raf=0;
+  if(reduce){render(T.end);return}
+  t=0;render(0);prev=performance.now();raf=requestAnimationFrame(loop)}
+ function stop(){cancelAnimationFrame(raf);raf=0}
+ function seek(s){stop();t=Math.max(0,Math.min(T.end,s));render(t)}
+ stage.addEventListener('click',play);
+ return {play:play,stop:stop,seek:seek,duration:T.end};
+}
+
+/* avvio: parte da sola; click sulla K per rivederla. ?t=4.2 la ferma a quel secondo. */
+var kk=KoreK('kk');
+var m=/[?&]t=([\d.]+)/.exec(location.search);
+if(kk){if(m)kk.seek(parseFloat(m[1]));else kk.play()}
+</script>
+</body>
+</html>

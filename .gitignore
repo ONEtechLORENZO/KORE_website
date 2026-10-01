@@ -1,0 +1,11 @@
+# dipendenze e build del progetto React (si rigenerano con npm install / npm run build)
+node_modules/
+kore-react/dist/
+
+# archivi e file di sistema
+*.zip
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
