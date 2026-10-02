@@ -3601,8 +3601,11 @@ html.theme-dark #nav-panel button[aria-current="page"]{color:#a06bff}
  html.nav-open .top{z-index:60!important}
  html.nav-open #nav-panel{display:block;animation:np-in .22s ease both}
  /* diagrammi Come funziona / Con KORE: a misura leggibile, si scorrono di lato */
- .fl2-stage,.ck2-stage{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:6px}
- .fl2-svg,.ck2-svg{min-width:820px}
+ /* v197: il disegno sta dentro lo schermo; i dettagli si leggono toccando un modulo */
+ .fl2-stage,.ck2-stage{overflow:hidden}
+ .fl2-svg,.ck2-svg{min-width:0;width:100%}
+ /* Con KORE: sul telefono le didascalie seguono la scala del disegno (a 13,5px non ci starebbero) */
+ .ck2-svg .cann .ct{font-size:19px!important}.ck2-svg .cann .cd{font-size:17px!important}.ck2-svg .cann .num{font-size:23px!important}
  .pan-hint{display:block;margin:4px 0 10px;text-align:center;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6315e8}
  html.theme-dark .pan-hint{color:#a06bff}
  /* i diamanti numerati non coprono piu' i titoli */
@@ -7659,7 +7662,7 @@ function wrap_isdone_reset(p){try{var w=document.getElementById(p+"-wrap");if(w)
  }
  /* diagrammi larghi: al centro all'apertura e a ogni cambio di scheda, con l'invito a scorrere */
  ['fl2-stage','ck2-stage'].forEach(function(id){var st=document.getElementById(id);if(!st)return;
-  var hint=document.createElement('p');hint.className='pan-hint';hint.textContent=t('\u2190 Scorri per vedere tutto il diagramma \u2192','\u2190 Swipe to see the whole diagram \u2192');
+  var hint=document.createElement('p');hint.className='pan-hint';if(id!=='fl2-stage')return;hint.textContent=t('Tocca un modulo per aprire i dettagli','Tap a module to open its details');
   st.parentNode.insertBefore(hint,st);
   function center(){if(innerWidth>800||!st.clientWidth)return;st.scrollLeft=Math.max(0,(st.scrollWidth-st.clientWidth)/2)}
   new MutationObserver(function(){setTimeout(center,60)}).observe(st,{childList:true});
