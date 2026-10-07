@@ -7696,7 +7696,10 @@ function wrap_isdone_reset(p){try{var w=document.getElementById(p+"-wrap");if(w)
 /* v187 — footer di Contatti: logo KORE "workflow" (animazione dell'utente, colori adattati al viola).
    Parte quando il footer entra a schermo, riparte a ogni apertura di Contatti; un clic la rivede.
    Link social e prodotti: si accendono solo quando l'indirizzo e' impostato qui sotto. */
-window.KORE_FOOTER_LINKS=window.KORE_FOOTER_LINKS||{linkedin:'',instagram:''};
+window.KORE_FOOTER_LINKS=window.KORE_FOOTER_LINKS||{
+ linkedin:'https://www.linkedin.com/company/otech-one/',
+ instagram:'https://www.instagram.com/onetech.one'
+};
 (function(){
  function KoreWorkflow(pfx){
   var stage=document.getElementById(pfx+'-stage');if(!stage)return null;
