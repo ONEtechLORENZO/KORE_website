@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#6315e8">
+<title>KORE — Richiedi una demo</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<!-- Pagina "solo richiesta demo" usata mentre il sito e' nascosto dietro la pagina Coming Soon.
+     Mostra il modulo "Richiedi una demo" del sito (sito.html#contatti) senza header, footer e
+     pulsante WhatsApp. sito.html NON viene modificato: qui lo si carica e si nascondono le parti in piu'. -->
+<style>
+ html,body{margin:0;height:100%;background:#6315e8;overflow:hidden}
+ #f{position:fixed;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity .25s}
+ #f.on{opacity:1}
+</style>
+</head>
+<body>
+<iframe id="f" title="Richiedi una demo KORE"></iframe>
+<script>
+(function(){
+ /* niente animazione d'ingresso del sito: la si segna come gia' vista per questa sessione */
+ try{sessionStorage.setItem('kore-intro-seen','1')}catch(e){}
+ var f=document.getElementById('f');
+ var CSS='header.top,.kwa,#kf,#kore-intro{display:none!important}'+
+         'html,body{background:#6315e8!important}'+
+         'html.theme-dark,html.theme-dark body{background:#1d1430!important}';
+ /* l'unica pagina ammessa: il modulo */
+ var OK=['#contatti'];
+ function prep(){
+  var w=f.contentWindow,d;try{d=f.contentDocument}catch(e){return}
+  /* solo sulla pagina vera del modulo, non sul documento vuoto iniziale dell'iframe */
+  if(!d||!d.head||!/\/sito\.html/.test(d.URL)||!d.getElementById('dm-screen')||d.getElementById('solo-demo'))return;
+  var s=d.createElement('style');s.id='solo-demo';s.textContent=CSS;d.head.appendChild(s);
+  function guard(){if(OK.indexOf(w.location.hash)<0){w.location.replace('#contatti');if(w.__dmOpen)w.__dmOpen()}}
+  w.addEventListener('hashchange',guard);guard();
+  /* "informativa privacy" nel consenso: solo testo, senza link */
+  function unlink(){[].forEach.call(d.querySelectorAll('#dm-screen .dm-cbox a'),function(a){a.parentNode.replaceChild(d.createTextNode(a.textContent),a)})}
+  unlink();new w.MutationObserver(unlink).observe(d.getElementById('dm-screen')||d.body,{childList:true,subtree:true});
+  setTimeout(function(){f.className='on'},60);
+ }
+ f.addEventListener('load',prep);
+ f.src='/sito.html#contatti';
+ /* il modulo compare anche se l'evento load arriva tardi (font e immagini pesanti) */
+ var tries=0,t=setInterval(function(){tries++;try{if(f.contentDocument&&f.contentDocument.readyState!=='loading'){prep()}}catch(e){}
+  if(f.className==='on'||tries>100)clearInterval(t)},100);
+})();
+</script>
+</body>
+</html>
