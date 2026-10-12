@@ -1,0 +1,12 @@
+# file binari: Git non deve mai toccarne i byte (niente conversione dei fine riga)
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.zip binary
