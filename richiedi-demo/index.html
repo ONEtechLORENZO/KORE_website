@@ -25,7 +25,10 @@
  var f=document.getElementById('f');
  var CSS='header.top,.kwa,#kf,#kore-intro{display:none!important}'+
          'html,body{background:#6315e8!important}'+
-         'html.theme-dark,html.theme-dark body{background:#1d1430!important}';
+         'html.theme-dark,html.theme-dark body{background:#1d1430!important}'+
+         '#dm-screen .dm-mat .op-dl{display:block;margin-top:8px;font-size:11.5px;color:#fff;text-decoration:underline;text-underline-offset:3px}';
+ var PDF='/Public/One-pager%20KORE.pdf';
+ var PRIVACY='https://trust.kore-hub.otech.one/informativa-privacy-sito/v1-0/';
  /* l'unica pagina ammessa: il modulo */
  var OK=['#contatti'];
  function prep(){
@@ -35,9 +38,24 @@
   var s=d.createElement('style');s.id='solo-demo';s.textContent=CSS;d.head.appendChild(s);
   function guard(){if(OK.indexOf(w.location.hash)<0){w.location.replace('#contatti');if(w.__dmOpen)w.__dmOpen()}}
   w.addEventListener('hashchange',guard);guard();
-  /* "informativa privacy" nel consenso: solo testo, senza link */
-  function unlink(){[].forEach.call(d.querySelectorAll('#dm-screen .dm-cbox a'),function(a){a.parentNode.replaceChild(d.createTextNode(a.textContent),a)})}
-  unlink();new w.MutationObserver(unlink).observe(d.getElementById('dm-screen')||d.body,{childList:true,subtree:true});
+  /* "informativa privacy" nel consenso: porta all'Informativa privacy del sito nel Trust Center (versione 1.0),
+     in una nuova scheda per non perdere il modulo. Il link viene sostituito con uno nuovo, senza gli handler del sito. */
+  function linkPrivacy(){[].forEach.call(d.querySelectorAll('#dm-screen .dm-cbox a:not([data-tc])'),function(a){
+   var n=d.createElement('a');n.href=PRIVACY;n.target='_blank';n.rel='noopener';n.setAttribute('data-tc','1');n.textContent=a.textContent;
+   a.parentNode.replaceChild(n,a)})}
+  linkPrivacy();new w.MutationObserver(linkPrivacy).observe(d.getElementById('dm-screen')||d.body,{childList:true,subtree:true});
+  /* materiali: via "Business case"; il One-pager si scarica subito quando lo si seleziona */
+  var bc=d.querySelector('#dm-screen .dm-mat[data-mat="Business case"]');if(bc)bc.parentNode.removeChild(bc);
+  var op=d.querySelector('#dm-screen .dm-mat[data-mat="One-pager KORE"]');
+  if(op){
+   var desc=op.querySelector('span > span');
+   if(desc){var dl=d.createElement('span');dl.className='op-dl';dl.textContent='↓ Clicca per scaricare il PDF';desc.parentNode.appendChild(dl)}
+   op.addEventListener('click',function(){
+    if(op.getAttribute('aria-pressed')!=='true')return; /* solo quando viene selezionato, non quando lo si deseleziona */
+    var a=d.createElement('a');a.href=PDF;a.download='One-pager KORE.pdf';a.style.display='none';d.body.appendChild(a);a.click();a.remove();
+   });
+  }
+  var lg=d.querySelector('#dm-screen .dm-mats .dm-legal');if(lg)lg.textContent='Selezionalo per scaricarlo subito: te lo alleghiamo anche alla risposta.';
   setTimeout(function(){f.className='on'},60);
  }
  f.addEventListener('load',prep);
