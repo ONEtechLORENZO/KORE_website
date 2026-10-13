@@ -483,3 +483,5 @@ html.theme-dark .tr-none{color:#cdbbe9}
 /* loghi GDPR / ISO 27001 / DORA nel pannello Conformità */
 .tr-seal.is-img{background:none;border:0;border-radius:0}
 .tr-seal.is-img img{display:block;width:52px;height:52px;object-fit:contain}
+/* nota della versione nella finestra "Versioni precedenti" */
+.dh-note{margin:8px 0 0;font-size:12px;line-height:1.6;color:#3f3350}
