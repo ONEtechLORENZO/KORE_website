@@ -10,3 +10,6 @@
 *.woff binary
 *.woff2 binary
 *.zip binary
+
+# archivio legale: copie di prova con impronte SHA-256 (MANIFEST.txt), Git non deve modificarne i byte
+trust-src/archivio/** -text

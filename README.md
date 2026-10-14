@@ -1,5 +1,29 @@
 # KORE — repository dei siti web
 
+## In short (for DevOps)
+
+This repository holds **two separate static websites**. They share no files and do not link to each other.
+There is **no build step on the server**: you only copy folders.
+
+| # | Domain | Status | What it is | Deploy this folder as web root |
+|---|---|---|---|---|
+| **1** | **`kore-hub.otech.one`** | live | KORE website: "coming soon" page, full site, demo request, purchase flow | **repository root** — minus the excluded paths below |
+| **2** | **`trust.kore-hub.otech.one`** | live | KORE **Trust Center**: legal documents, sub-processors, security, version archive | **`trust/` only** |
+| — | `trustcenter.kore.otech.one` | **does not exist** (no DNS record, never live) | mentioned by mistake in early document drafts | **nothing to do — do not create it** |
+
+> ⚠️ **There is no `trustcenter.kore-hub.otech.one`.** The Trust Center is **`trust.kore-hub.otech.one`**: that exact name is printed in
+> every legal page and PDF ("Indirizzo permanente…") and in signed contracts. Do not create or use any other name for it.
+
+**Never publish these** (on either domain): `trust-src/` (sources, and `trust-src/archivio/` is a private legal evidence archive),
+`kore-react/`, `kore-vtiger-apps-script.gs`, `README.md`, `.gitattributes`, `.gitignore`, `.git/`, `*.zip`, `kore-k-animation.html`, `funzioni2-page.html`.
+And `trust/` goes **only** on site 2, never on site 1.
+
+**Never change or delete** the versioned Trust Center URLs (`/<documento>/v1-0/`), the short links (`/sla/`, `/dpa/`, `/<documento>/v1.0/`) and the PDFs in `trust/assets/pdf/`: signed contracts point to them.
+
+**Redirects (site 2):** short links like `/sla` already work through small redirect pages inside `trust/` (no server setup needed). For proper HTTP 301s, apply `trust-src/redirect-s3-routing-rules.json` as the S3 bucket's website routing rules (S3 + CloudFront).
+
+---
+
 Questo repository contiene **due siti separati**, pubblicati su **due domini diversi**.
 Non hanno link tra loro e non condividono file: ognuno ha la propria cartella radice.
 
@@ -7,12 +31,12 @@ Non hanno link tra loro e non condividono file: ognuno ha la propria cartella ra
 |---|---|---|---|
 | **1. Sito KORE** | `kore-hub.otech.one` | **la radice del repository** (`/`) | pagina "coming soon", sito completo, richiesta demo, percorso d'acquisto |
 | **2. Trust Center** | `trust.kore-hub.otech.one` | **solo la cartella `trust/`** | documenti legali e privacy, sub-responsabili, sicurezza, archivio versioni |
+| (inesistente) | `trustcenter.kore.otech.one` | nessuna: il dominio non esiste e non va creato | citato per errore nelle prime bozze dei documenti |
 
 Entrambi sono **siti statici** (solo HTML, CSS, JS, immagini, PDF): nessun server applicativo, nessun database, nessun build da eseguire sul server.
 
-> **Nota sul dominio del Trust Center:** il codice usa `trust.kore-hub.otech.one`
-> (costante `SITE` in `trust-src/build.py`, stampata nel riquadro "Indirizzo permanente di questa versione" di ogni documento).
-> Se si sceglie un altro sottodominio (es. `trustcenter.kore-hub.otech.one`), va cambiata `SITE` e rigenerato il sito (vedi sotto).
+> **Dominio del Trust Center:** è `trust.kore-hub.otech.one` (costante `SITE` in `trust-src/build.py`, stampata nel riquadro
+> "Indirizzo permanente di questa versione" di ogni documento e nei PDF). Non esiste `trustcenter.kore-hub.otech.one`.
 
 ---
 
@@ -34,10 +58,10 @@ Web root = radice del repository. Si pubblicano questi file e cartelle:
 | Percorso | Perché |
 |---|---|
 | `trust/` | è il Trust Center: va **solo** su `trust.kore-hub.otech.one` |
-| `trust-src/` | sorgenti e script del Trust Center, non è un sito |
+| `trust-src/` | sorgenti e script del Trust Center, non è un sito; `trust-src/archivio/` è l'archivio legale di prova (copie delle pagine prima delle modifiche): **privato** |
 | `kore-react/` | sorgente React (si pubblica solo la build in `acquista/`) |
 | `kore-vtiger-apps-script.gs` | script Google Apps Script per il CRM: vive su Google, non sul web server |
-| `README.md`, `.gitignore`, `.git/` | file del repository |
+| `README.md`, `.gitattributes`, `.gitignore`, `.git/`, `*.zip` | file del repository |
 | `kore-k-animation.html`, `funzioni2-page.html` | pagine di prova, non collegate al sito |
 
 ### Quando togliere la pagina "coming soon"
@@ -80,6 +104,23 @@ I file in `trust/` sono **generati**: non si modificano a mano.
 
 Una nuova versione di un documento = nuovo file di contenuto + nuova riga in cima alle sue `versions` in `build.py`;
 la versione precedente resta online al suo indirizzo permanente.
+
+### Link brevi e redirect (sul sito 2)
+
+I contratti possono citare link brevi. Ognuno porta alla pagina della **versione esatta** (mai alla pagina generica, che mostra
+la versione corrente e cambia quando esce una nuova versione):
+
+| Link | Porta a |
+|---|---|
+| `/sla` | `/service-level-agreement/v1-0/` |
+| `/dpa` | `/data-processing-agreement/v1-0/` |
+| `/<documento>/v1.0/` (col punto) | `/<documento>/v1-0/` |
+
+- **Funzionano già senza configurare il server:** `build.py` genera in `trust/` piccole pagine di reindirizzamento (es. `trust/sla/index.html`).
+- **301 veri (consigliato):** applicare `trust-src/redirect-s3-routing-rules.json` come *Redirection rules* del sito statico S3
+  (S3 → bucket → Properties → Static website hosting). Il file è generato da `build.py`; non va pubblicato.
+- **Aggiungere un link breve:** una riga in `SHORT_LINKS` in `trust-src/build.py`, rigenerare, ripubblicare `trust/` e riapplicare le regole S3.
+- `trustcenter.kore.otech.one` **non esiste**: non c'è nulla da reindirizzare da quel dominio.
 
 ---
 

@@ -24,34 +24,53 @@ EDGE = r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
 # stato: 'bozza' | 'vigore' | 'aggiornamento' (indicare 'nuova_efficacia') | 'superata'
 # pub / eff: date in chiaro ('8 ottobre 2026'); vuote = "Da definire"
 # pdf / pdf_src (facoltativi): nome del PDF scaricabile e file ufficiale in trust-src/ da copiare al posto di quello generato
+# nota sulla versione 1.0 (testo fornito dalla revisione legale, da riportare cosi' com'e')
+NOTE_V10 = ('Versione 1.0 – 9 ottobre 2026. Prima versione pubblicata e applicabile. Eventuali testi di lavoro precedenti '
+            'non sono stati pubblicati né hanno avuto efficacia contrattuale.')
+
+# data di pubblicazione della correzione del 13 ottobre: se il deploy avviene un altro giorno, cambiare qui e rigenerare
+PUBLISH_DATE = '13 ottobre 2026'
+
+# testo dell'Archivio versioni approvato dall'avvocato (da riportare cosi' com'e')
+ARCHIVE_TEXT = [
+ 'Condizioni Contrattuali Centralizzate, SLA, DPA: versione 1.0 del 9 ottobre 2026. Prima versione pubblicata.',
+ 'Correzione redazionale del %s (Condizioni Centralizzate v1.0): aggiunte le rubriche degli artt. 7 e 13. '
+ 'Il contenuto delle disposizioni è invariato. La copia della versione anteriore alla correzione è conservata in archivio.' % PUBLISH_DATE,
+ 'Indirizzo: i documenti sono pubblicati su trust.kore-hub.otech.one.',
+]
+
+# registro delle modifiche, dalla piu' recente: (data, descrizione)
+CHANGELOG = [(PUBLISH_DATE, ARCHIVE_TEXT[1]), (PUBLISH_DATE, ARCHIVE_TEXT[2])]
+
+
 DOCS = [
  dict(slug='termini-e-condizioni', group='Contrattuali', title='Condizioni Contrattuali Centralizzate',
       sub='Corpus contrattuale generale applicabile ai servizi, alle piattaforme, ai moduli, alle API e alle soluzioni tecnologiche forniti da One Tech S.r.l., inclusa KORE',
-      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore',
+      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore', note=NOTE_V10,
                      pdf='KORE_Condizioni_Contrattuali_Centralizzate_v1.0.pdf', pdf_src='pdf/KORE_Condizioni_Contrattuali_Centralizzate_v1.0.pdf')]),
  dict(slug='service-level-agreement', group='Contrattuali', title='Service Level Agreement',
       sub='SLA standard per i Servizi SaaS di One Tech S.r.l., inclusa KORE',
-      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore',
+      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore', note=NOTE_V10,
                      pdf='KORE_Service_Level_Agreement_v1.0.pdf', pdf_src='pdf/KORE_Service_Level_Agreement_v1.0.pdf')]),
  dict(slug='data-processing-agreement', group='Contrattuali', title='Data Processing Agreement',
       sub='Nomina a Responsabile del trattamento ai sensi dell’art. 28 del Regolamento (UE) 2016/679 - modello standard',
-      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore',
+      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore', note=NOTE_V10,
                      pdf='KORE_Data_Processing_Agreement_v1.0.pdf', pdf_src='pdf/KORE_Data_Processing_Agreement_v1.0.pdf')]),
  dict(slug='condizioni-uso-utenti', group='Piattaforma', title='Condizioni d’uso Utenti',
       sub='Per gli Utenti autorizzati della Piattaforma',
-      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore',
+      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore', note=NOTE_V10,
                      pdf='KORE_Condizioni_Uso_Utenti_v1.0.pdf', pdf_src='pdf/KORE_Condizioni_Uso_Utenti_v1.0.pdf')]),
  dict(slug='privacy-policy', group='Privacy', title='Informativa privacy Utenti',
       sub='Informativa ai sensi degli artt. 13 e 14 del Regolamento (UE) 2016/679 per gli operatori autorizzati ad accedere alla piattaforma KORE',
-      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore',
+      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore', note=NOTE_V10,
                      pdf='KORE_Informativa_Privacy_Utenti_v1.0.pdf', pdf_src='pdf/KORE_Informativa_Privacy_Utenti_v1.0.pdf')]),
  dict(slug='informativa-privacy-sito', group='Privacy', title='Informativa privacy del sito',
       sub='Informativa ai sensi degli artt. 13 e 14 del Regolamento (UE) 2016/679 per i visitatori del Trust Center KORE e per i contatti commerciali',
-      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore',
+      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore', note=NOTE_V10,
                      pdf='KORE_Informativa_Privacy_Sito_v1.0.pdf', pdf_src='pdf/KORE_Informativa_Privacy_Sito_v1.0.pdf')]),
  dict(slug='cookie-policy', group='Privacy', title='Cookie policy',
       sub='Informativa sull’uso di cookie e altri strumenti di tracciamento sul Trust Center KORE',
-      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore',
+      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore', note=NOTE_V10,
                      pdf='KORE_Cookie_Policy_v1.0.pdf', pdf_src='pdf/KORE_Cookie_Policy_v1.0.pdf')]),
 ]
 
@@ -61,7 +80,7 @@ PAGES = [  # pagine semplici, senza versioni
 ]
 
 SUBPROCESSORS = dict(
- updated='9 ottobre 2026',  # data dell'ultimo aggiornamento dell'elenco
+ updated='13 ottobre 2026',  # data dell'ultimo aggiornamento dell'elenco
  rows=[  # (soggetto, servizio, ruolo privacy, paese/regione, garanzia trasferimento)
   ('Amazon Web Services EMEA SARL', 'hosting, database, cache, storage, backup, monitoraggio', 'Sub-responsabile',
    'UE - Francoforte (eu-central-1)', 'Non applicabile (SEE); per eventuali accessi extra SEE: EU-US Data Privacy Framework / Clausole Contrattuali Tipo'),
@@ -72,7 +91,6 @@ SUBPROCESSORS = dict(
    'Stati Uniti: EU-US Data Privacy Framework; altri Paesi terzi: Clausole Contrattuali Tipo'),
   ('Cooabit S.r.l.', 'OCR ed estrazione dati da documenti', 'Sub-responsabile', 'UE',
    'Non applicabile (SEE); file e dati estratti cancellati 30 minuti dopo la chiusura della pratica'),
-  ('Aruba PEC S.p.A.', 'invio di comunicazioni tramite PEC', 'Sub-responsabile', 'Italia', 'Non applicabile (SEE)'),
  ],
  others=[  # soggetti della filiera che non sono sub-responsabili: (soggetto, attivita', ruolo privacy)
   ('Meta Platforms Ireland Ltd (WhatsApp)', 'trasporto dei messaggi WhatsApp',
@@ -173,6 +191,11 @@ def write(rel, text):
     open(path, 'w', encoding='utf-8', newline='\n').write(text)
 
 
+def ver_label(v):
+    """Etichetta di versione identica in testa e in fondo: "Versione 1.0 – 9 ottobre 2026"."""
+    return 'Versione %s – %s' % (v['v'], date(v['pub']))
+
+
 def doc_page(doc, v, is_current_url):
     r = '../' if is_current_url else '../../'
     body, _ = sections(doc, v)
@@ -187,6 +210,7 @@ def doc_page(doc, v, is_current_url):
     return (head('KORE — %s v%s' % (doc['title'], v['v']), r)
             + '\n<main class="tc-wrap tc-doc">\n <div class="tc-inner">\n  <div class="dh">\n'
             + '   <h1 class="dh-title">KORE - %s</h1>\n' % doc['title']
+            + '   <p class="dh-ver">%s</p>\n' % ver_label(v)
             + '   <p class="dh-sub">%s</p>\n' % doc['sub']
             + '   <dl class="dh-meta-grid">%s</dl>\n' % ''.join('<div><dt>%s</dt><dd>%s</dd></div>' % kv for kv in (
                 ('Versione', v['v']), ('Pubblicazione', date(v['pub'])), ('Stato', badge(v))))
@@ -197,7 +221,8 @@ def doc_page(doc, v, is_current_url):
             + '   </div>\n  </div>\n'
             + history_dialog(doc, v, r)
             + layout('  <p class="dh-notice%s">%s</p>\n\n' % ('' if v is cur else ' is-old', notice)
-                     + body.replace('{{root}}', r))
+                     + body.replace('{{root}}', r)
+                     + '  <p class="dh-verfoot">KORE - %s &middot; %s</p>\n' % (doc['title'], ver_label(v)))
             + '\n  ' + FOOT.format(r=r) + '\n </div>\n</main>\n' + HIST_JS + TOC_JS + '</body>\n</html>\n')
 
 
@@ -239,8 +264,9 @@ def history_dialog(doc, shown, r):
         links = (('<a class="dh-link" href="%s%s/%s/">Apri la versione</a>' % (r, doc['slug'], vkey(v))) if not here else '') + \
                 '<a class="dh-link" href="%sassets/pdf/%s" download>Scarica il PDF</a>' % (r, pdf_name(doc, v))
         items.append('    <li class="dh-item%s"><div class="dh-row"><b>Versione %s</b>%s</div>'
-                     '<p class="dh-meta">Pubblicazione: %s</p><p class="dh-links">%s</p></li>\n'
-                     % (' is-cur' if here else '', v['v'], tags, date(v['pub']), links))
+                     '<p class="dh-meta">Pubblicazione: %s</p>%s<p class="dh-links">%s</p></li>\n'
+                     % (' is-cur' if here else '', v['v'], tags, date(v['pub']),
+                        ('<p class="dh-note">%s</p>' % v['note']) if v.get('note') else '', links))
     empty = ('   <p class="dh-empty">Non ci sono versioni precedenti: questa è la prima versione del documento. '
              'Quando verrà pubblicata una nuova versione, quelle precedenti resteranno sempre consultabili qui.</p>\n'
              if len(doc['versions']) == 1 else '')
@@ -259,6 +285,10 @@ HIST_JS = ('<script>(function(){var d=document.getElementById("dh-hist"),b=docum
            'if(location.hash==="#versioni")open()})();</script>\n')
 
 
+def changelog_rows():
+    return ''.join('<tr><td data-label="Data">%s</td><td data-label="Descrizione">%s</td></tr>' % c for c in CHANGELOG)
+
+
 def simple_page(p):
     r = '../'
     if p['src']:
@@ -268,13 +298,14 @@ def simple_page(p):
         for d in DOCS:
             for v in d['versions']:
                 rows.append('<tr><td data-label="Documento">%s</td><td data-label="Versione"><a href="%s%s/%s/">v%s</a></td>'
-                            '<td data-label="Pubblicazione">%s</td><td data-label="Stato">%s</td></tr>'
-                            % (d['title'], r, d['slug'], vkey(v), v['v'], date(v['pub']), badge(v)))
-        body = ('  <div class="tc-note">Qui verrà descritto, per ogni nuova versione, cosa è cambiato rispetto alla precedente. '
-                'Per ora è disponibile l’elenco delle versioni pubblicate.</div>\n'
-                '  <section class="tc-sec"><h2><i>01</i>Versioni pubblicate</h2><i class="tc-rule" aria-hidden="true"></i>\n'
+                            '<td data-label="Pubblicazione">%s</td><td data-label="Stato">%s</td><td data-label="Nota">%s</td></tr>'
+                            % (d['title'], r, d['slug'], vkey(v), v['v'], date(v['pub']), badge(v), v.get('note', '')))
+        body = ('  <section class="tc-sec" id="modifiche"><h2><i>01</i>Modifiche</h2><i class="tc-rule" aria-hidden="true"></i>\n'
+                '   <div class="tc-tabwrap"><table class="tc-table"><thead><tr><th>Data</th><th>Descrizione</th></tr></thead>'
+                '<tbody>%s</tbody></table></div>\n  </section>\n'
+                '  <section class="tc-sec" id="versioni"><h2><i>02</i>Versioni pubblicate</h2><i class="tc-rule" aria-hidden="true"></i>\n'
                 '   <div class="tc-tabwrap"><table class="tc-table"><thead><tr><th>Documento</th><th>Versione</th><th>Pubblicazione</th>'
-                '<th>Stato</th></tr></thead><tbody>%s</tbody></table></div>\n  </section>\n') % ''.join(rows)
+                '<th>Stato</th><th>Nota</th></tr></thead><tbody>%s</tbody></table></div>\n  </section>\n') % (changelog_rows(), ''.join(rows))
     return (head('KORE — ' + p['title'], r)
             + '\n<main class="tc-wrap tc-doc">\n <div class="tc-inner">\n  <div class="dh">\n'
             + '   <h1 class="dh-title">%s</h1>\n   <p class="dh-sub">%s</p>\n' % (p['title'], p['sub'])
@@ -295,7 +326,7 @@ def card(d):
 
 
 # loghi ufficiali dei sub-responsabili (file in trust/assets/logos/, nessuna risorsa esterna)
-SP_LOGOS = [('Amazon Web Services', 'aws.svg'), ('Gupshup', 'gupshup.svg'), ('Aruba', 'aruba.svg')]
+SP_LOGOS = [('Amazon Web Services', 'aws.svg'), ('Gupshup', 'gupshup.svg')]
 
 
 def sp_name(name):
@@ -332,15 +363,16 @@ def home():
         planned = '    <p class="tr-none">Nessuna modifica pianificata.</p>\n'
     sec = ''.join('     <article class="tr-sec-card"><h3>%s</h3><p>%s</p></article>\n' % (t, x.replace('{{root}}', ''))
                   for t, x in SECURITY)
-    arch = ''
+    arch = ('    <section class="tr-arch" id="archivio-note">\n%s    </section>\n'
+            % ''.join('     <p class="tr-arch-note">%s</p>\n' % t for t in ARCHIVE_TEXT))
     for d in DOCS:
         rows = ''.join('<tr><td data-label="Versione"><a href="%s/%s/">v%s</a></td><td data-label="Data pubblicazione">%s</td>'
-                       '<td data-label="Stato">%s</td>'
+                       '<td data-label="Stato">%s</td><td data-label="Nota">%s</td>'
                        '<td data-label="PDF"><a href="assets/pdf/%s" download>Scarica</a></td></tr>'
-                       % (d['slug'], vkey(v), v['v'], date(v['pub']), badge(v), pdf_name(d, v)) for v in d['versions'])
+                       % (d['slug'], vkey(v), v['v'], date(v['pub']), badge(v), v.get('note', ''), pdf_name(d, v)) for v in d['versions'])
         arch += ('    <section class="tr-arch" id="archivio-%s"><h3 class="tr-gh"><a href="%s/">%s</a></h3>\n'
                  '     <div class="tc-tabwrap"><table class="tc-table"><thead><tr><th>Versione</th><th>Data pubblicazione</th>'
-                 '<th>Stato</th><th>PDF</th></tr></thead><tbody>%s</tbody></table></div>\n    </section>\n'
+                 '<th>Stato</th><th>Nota</th><th>PDF</th></tr></thead><tbody>%s</tbody></table></div>\n    </section>\n'
                  ) % (d['slug'], d['slug'], d['title'], rows)
 
     return (head('KORE Trust Center', '', 'Documenti contrattuali, privacy e sicurezza della piattaforma KORE di One Tech S.r.l.')
@@ -466,7 +498,54 @@ def make_pdfs():
             print('pdf', pdf_name(d, v), os.path.getsize(out))
 
 
+# Link brevi citati nei contratti -> pagina della versione ESATTA (mai la pagina "corrente", che cambia con le nuove versioni).
+# Per aggiungere un link: una riga qui, poi rigenerare e ripubblicare. Le destinazioni non vanno mai cambiate.
+SHORT_LINKS = {
+ 'sla': 'service-level-agreement/v1-0',
+ 'dpa': 'data-processing-agreement/v1-0',
+}
+
+
+def redirect_targets():
+    """Tutti i redirect: link brevi + varianti "v1.0" (col punto) di ogni versione pubblicata."""
+    t = dict(SHORT_LINKS)
+    for d in DOCS:
+        for v in d['versions']:
+            t[d['slug'] + '/v' + v['v']] = d['slug'] + '/' + vkey(v)
+    return t
+
+
+def redirect_page(src, dst):
+    """Pagina di reindirizzamento statica (funziona su qualsiasi hosting); il server puo' in piu' rispondere con un 301."""
+    rel = '../' * (src.count('/') + 1) + dst + '/'
+    url = SITE + dst + '/'
+    return ('<!DOCTYPE html>\n<html lang="it">\n<head>\n<meta charset="utf-8">\n'
+            '<!-- generato da trust-src/build.py: non modificare a mano -->\n'
+            '<meta name="robots" content="noindex">\n<title>KORE Trust Center</title>\n'
+            '<link rel="canonical" href="%s">\n<meta http-equiv="refresh" content="0; url=%s">\n'
+            '<script>location.replace(%r + location.hash)</script>\n</head>\n<body>\n'
+            '<p>Il documento si trova a <a href="%s">%s</a>.</p>\n</body>\n</html>\n') % (url, rel, rel, rel, url)
+
+
+def s3_routing_rules():
+    """Regole di redirect 301 per S3 static website hosting (da applicare lato server da DevOps)."""
+    import json
+    rules = []
+    for src, dst in sorted(redirect_targets().items()):
+        for key in (src, src + '/'):
+            rules.append({'Condition': {'KeyPrefixEquals': key},
+                          'Redirect': {'HostName': SITE.split('/')[2], 'Protocol': 'https',
+                                       'ReplaceKeyWith': dst + '/', 'HttpRedirectCode': '301'}})
+    return json.dumps(rules, indent=1, ensure_ascii=False) + '\n'
+
+
 if __name__ == '__main__':
+    for src, dst in redirect_targets().items():
+        assert os.path.isdir(os.path.join(OUT, *dst.split('/'))) or dst.split('/')[0] in [d['slug'] for d in DOCS], dst
+        path = os.path.join(OUT, *src.split('/'), 'index.html')
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        open(path, 'w', encoding='utf-8', newline='\n').write(redirect_page(src, dst))
+    open(os.path.join(HERE, 'redirect-s3-routing-rules.json'), 'w', encoding='utf-8', newline='\n').write(s3_routing_rules())
     for d in DOCS:
         for v in d['versions']:
             write(d['slug'] + '/' + vkey(v), doc_page(d, v, False))
