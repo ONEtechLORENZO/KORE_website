@@ -1,0 +1,200 @@
+[
+ {
+  "Condition": {
+   "KeyPrefixEquals": "condizioni-uso-utenti/v1.0"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "condizioni-uso-utenti/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "condizioni-uso-utenti/v1.0/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "condizioni-uso-utenti/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "cookie-policy/v1.0"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "cookie-policy/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "cookie-policy/v1.0/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "cookie-policy/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "data-processing-agreement/v1.0"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "data-processing-agreement/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "data-processing-agreement/v1.0/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "data-processing-agreement/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "dpa"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "data-processing-agreement/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "dpa/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "data-processing-agreement/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "informativa-privacy-sito/v1.0"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "informativa-privacy-sito/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "informativa-privacy-sito/v1.0/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "informativa-privacy-sito/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "privacy-policy/v1.0"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "privacy-policy/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "privacy-policy/v1.0/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "privacy-policy/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "service-level-agreement/v1.0"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "service-level-agreement/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "service-level-agreement/v1.0/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "service-level-agreement/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "sla"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "service-level-agreement/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "sla/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "service-level-agreement/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "termini-e-condizioni/v1.0"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "termini-e-condizioni/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "termini-e-condizioni/v1.0/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "termini-e-condizioni/v1-0/",
+   "HttpRedirectCode": "301"
+  }
+ }
+]

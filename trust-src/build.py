@@ -499,7 +499,54 @@ def make_pdfs():
             print('pdf', pdf_name(d, v), os.path.getsize(out))
 
 
+# Link brevi citati nei contratti -> pagina della versione ESATTA (mai la pagina "corrente", che cambia con le nuove versioni).
+# Per aggiungere un link: una riga qui, poi rigenerare e ripubblicare. Le destinazioni non vanno mai cambiate.
+SHORT_LINKS = {
+ 'sla': 'service-level-agreement/v1-0',
+ 'dpa': 'data-processing-agreement/v1-0',
+}
+
+
+def redirect_targets():
+    """Tutti i redirect: link brevi + varianti "v1.0" (col punto) di ogni versione pubblicata."""
+    t = dict(SHORT_LINKS)
+    for d in DOCS:
+        for v in d['versions']:
+            t[d['slug'] + '/v' + v['v']] = d['slug'] + '/' + vkey(v)
+    return t
+
+
+def redirect_page(src, dst):
+    """Pagina di reindirizzamento statica (funziona su qualsiasi hosting); il server puo' in piu' rispondere con un 301."""
+    rel = '../' * (src.count('/') + 1) + dst + '/'
+    url = SITE + dst + '/'
+    return ('<!DOCTYPE html>\n<html lang="it">\n<head>\n<meta charset="utf-8">\n'
+            '<!-- generato da trust-src/build.py: non modificare a mano -->\n'
+            '<meta name="robots" content="noindex">\n<title>KORE Trust Center</title>\n'
+            '<link rel="canonical" href="%s">\n<meta http-equiv="refresh" content="0; url=%s">\n'
+            '<script>location.replace(%r + location.hash)</script>\n</head>\n<body>\n'
+            '<p>Il documento si trova a <a href="%s">%s</a>.</p>\n</body>\n</html>\n') % (url, rel, rel, rel, url)
+
+
+def s3_routing_rules():
+    """Regole di redirect 301 per S3 static website hosting (da applicare lato server da DevOps)."""
+    import json
+    rules = []
+    for src, dst in sorted(redirect_targets().items()):
+        for key in (src, src + '/'):
+            rules.append({'Condition': {'KeyPrefixEquals': key},
+                          'Redirect': {'HostName': SITE.split('/')[2], 'Protocol': 'https',
+                                       'ReplaceKeyWith': dst + '/', 'HttpRedirectCode': '301'}})
+    return json.dumps(rules, indent=1, ensure_ascii=False) + '\n'
+
+
 if __name__ == '__main__':
+    for src, dst in redirect_targets().items():
+        assert os.path.isdir(os.path.join(OUT, *dst.split('/'))) or dst.split('/')[0] in [d['slug'] for d in DOCS], dst
+        path = os.path.join(OUT, *src.split('/'), 'index.html')
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        open(path, 'w', encoding='utf-8', newline='\n').write(redirect_page(src, dst))
+    open(os.path.join(HERE, 'redirect-s3-routing-rules.json'), 'w', encoding='utf-8', newline='\n').write(s3_routing_rules())
     for d in DOCS:
         for v in d['versions']:
             write(d['slug'] + '/' + vkey(v), doc_page(d, v, False))

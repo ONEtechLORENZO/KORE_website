@@ -9,7 +9,7 @@ There is **no build step on the server**: you only copy folders.
 |---|---|---|---|---|
 | **1** | **`kore-hub.otech.one`** | live | KORE website: "coming soon" page, full site, demo request, purchase flow | **repository root** — minus the excluded paths below |
 | **2** | **`trust.kore-hub.otech.one`** | live | KORE **Trust Center**: legal documents, sub-processors, security, version archive | **`trust/` only** |
-| — | `trustcenter.kore.otech.one` | **old address, redirect only** | former Trust Center address, cited in older contracts | nothing: 301 redirects to site 2 (see "Old address" below) |
+| — | `trustcenter.kore.otech.one` | **does not exist** (no DNS record, never live) | mentioned by mistake in early document drafts | **nothing to do — do not create it** |
 
 > ⚠️ **There is no `trustcenter.kore-hub.otech.one`.** The Trust Center is **`trust.kore-hub.otech.one`**: that exact name is printed in
 > every legal page and PDF ("Indirizzo permanente…") and in signed contracts. Do not create or use any other name for it.
@@ -18,7 +18,9 @@ There is **no build step on the server**: you only copy folders.
 `kore-react/`, `kore-vtiger-apps-script.gs`, `README.md`, `.gitattributes`, `.gitignore`, `.git/`, `*.zip`, `kore-k-animation.html`, `funzioni2-page.html`.
 And `trust/` goes **only** on site 2, never on site 1.
 
-**Never change or delete** the versioned Trust Center URLs (`/<documento>/v1-0/`) and the PDFs in `trust/assets/pdf/`: signed contracts point to them.
+**Never change or delete** the versioned Trust Center URLs (`/<documento>/v1-0/`), the short links (`/sla/`, `/dpa/`, `/<documento>/v1.0/`) and the PDFs in `trust/assets/pdf/`: signed contracts point to them.
+
+**Redirects (site 2):** short links like `/sla` already work through small redirect pages inside `trust/` (no server setup needed). For proper HTTP 301s, apply `trust-src/redirect-s3-routing-rules.json` as the S3 bucket's website routing rules (S3 + CloudFront).
 
 ---
 
@@ -29,7 +31,7 @@ Non hanno link tra loro e non condividono file: ognuno ha la propria cartella ra
 |---|---|---|---|
 | **1. Sito KORE** | `kore-hub.otech.one` | **la radice del repository** (`/`) | pagina "coming soon", sito completo, richiesta demo, percorso d'acquisto |
 | **2. Trust Center** | `trust.kore-hub.otech.one` | **solo la cartella `trust/`** | documenti legali e privacy, sub-responsabili, sicurezza, archivio versioni |
-| (vecchio) | `trustcenter.kore.otech.one` | nessuna: solo redirect 301 verso il sito 2 | vecchio indirizzo del Trust Center, citato nei contratti precedenti |
+| (inesistente) | `trustcenter.kore.otech.one` | nessuna: il dominio non esiste e non va creato | citato per errore nelle prime bozze dei documenti |
 
 Entrambi sono **siti statici** (solo HTML, CSS, JS, immagini, PDF): nessun server applicativo, nessun database, nessun build da eseguire sul server.
 
@@ -103,26 +105,22 @@ I file in `trust/` sono **generati**: non si modificano a mano.
 Una nuova versione di un documento = nuovo file di contenuto + nuova riga in cima alle sue `versions` in `build.py`;
 la versione precedente resta online al suo indirizzo permanente.
 
-### Vecchio indirizzo → `trustcenter.kore.otech.one` (solo redirect)
+### Link brevi e redirect (sul sito 2)
 
-Il Trust Center era pubblicato su `trustcenter.kore.otech.one`. I contratti precedenti citano quei link, e l'Archivio versioni
-dichiara che il vecchio indirizzo "resta attivo e reindirizza ai documenti nella versione corrispondente". Quindi:
+I contratti possono citare link brevi. Ognuno porta alla pagina della **versione esatta** (mai alla pagina generica, che mostra
+la versione corrente e cambia quando esce una nuova versione):
 
-- il dominio deve risolvere ed essere in HTTPS, **senza contenuti propri**;
-- ogni vecchio link va con **301 alla pagina `/v1-0/` esatta**, non alla pagina generica del documento:
-
-| Vecchio percorso | Redirect 301 verso `https://trust.kore-hub.otech.one` |
+| Link | Porta a |
 |---|---|
 | `/sla` | `/service-level-agreement/v1-0/` |
 | `/dpa` | `/data-processing-agreement/v1-0/` |
-| `/termini-e-condizioni` | `/termini-e-condizioni/v1-0/` |
-| `/condizioni-uso-utenti` | `/condizioni-uso-utenti/v1-0/` |
-| `/privacy-policy` | `/privacy-policy/v1-0/` |
-| `/informativa-privacy-sito` | `/informativa-privacy-sito/v1-0/` |
-| `/cookie-policy` | `/cookie-policy/v1-0/` |
-| `/` e qualsiasi altro percorso | `/` |
+| `/<documento>/v1.0/` (col punto) | `/<documento>/v1-0/` |
 
-I vecchi percorsi in tabella sono da confermare con la configurazione del vecchio sito (con e senza `/` finale).
+- **Funzionano già senza configurare il server:** `build.py` genera in `trust/` piccole pagine di reindirizzamento (es. `trust/sla/index.html`).
+- **301 veri (consigliato):** applicare `trust-src/redirect-s3-routing-rules.json` come *Redirection rules* del sito statico S3
+  (S3 → bucket → Properties → Static website hosting). Il file è generato da `build.py`; non va pubblicato.
+- **Aggiungere un link breve:** una riga in `SHORT_LINKS` in `trust-src/build.py`, rigenerare, ripubblicare `trust/` e riapplicare le regole S3.
+- `trustcenter.kore.otech.one` **non esiste**: non c'è nulla da reindirizzare da quel dominio.
 
 ---
 
