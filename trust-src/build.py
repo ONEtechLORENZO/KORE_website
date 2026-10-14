@@ -36,8 +36,7 @@ ARCHIVE_TEXT = [
  'Condizioni Contrattuali Centralizzate, SLA, DPA: versione 1.0 del 9 ottobre 2026. Prima versione pubblicata.',
  'Correzione redazionale del %s (Condizioni Centralizzate v1.0): aggiunte le rubriche degli artt. 7 e 13. '
  'Il contenuto delle disposizioni è invariato. La copia della versione anteriore alla correzione è conservata in archivio.' % PUBLISH_DATE,
- 'Indirizzo: dal %s i documenti sono pubblicati su trust.kore-hub.otech.one. Il precedente indirizzo '
- 'trustcenter.kore.otech.one resta attivo e reindirizza ai documenti nella versione corrispondente.' % PUBLISH_DATE,
+ 'Indirizzo: i documenti sono pubblicati su trust.kore-hub.otech.one.',
 ]
 
 # registro delle modifiche, dalla piu' recente: (data, descrizione)
