@@ -485,3 +485,10 @@ html.theme-dark .tr-none{color:#cdbbe9}
 .tr-seal.is-img img{display:block;width:52px;height:52px;object-fit:contain}
 /* nota della versione nella finestra "Versioni precedenti" */
 .dh-note{margin:8px 0 0;font-size:12px;line-height:1.6;color:#3f3350}
+/* etichetta di versione in testa e in fondo alle pagine documento; testo dell'archivio versioni */
+.tc-doc .dh-ver{margin:14px 0 0;font-size:15px;color:#3d3646;text-transform:none;letter-spacing:0}
+.dh-verfoot{margin:40px 0 0;padding-top:16px;border-top:1px solid rgba(61,54,70,.25);font-size:12px;letter-spacing:.02em;color:#5f4f72}
+.tr-arch-note{margin:0 0 12px;max-width:900px;font-size:13px;line-height:1.75;color:#3f3350}
+#archivio-note{margin-bottom:34px;padding:20px 24px;border:1px solid rgba(61,54,70,.16);border-radius:12px;background:rgba(255,255,255,.4)}
+#archivio-note .tr-arch-note:last-child{margin-bottom:0}
+.tc-doc .dh .dh-ver{display:block;text-align:center}

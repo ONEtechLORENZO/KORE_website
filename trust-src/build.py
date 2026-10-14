@@ -28,11 +28,21 @@ EDGE = r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
 NOTE_V10 = ('Versione 1.0 – 9 ottobre 2026. Prima versione pubblicata e applicabile. Eventuali testi di lavoro precedenti '
             'non sono stati pubblicati né hanno avuto efficacia contrattuale.')
 
-# registro delle modifiche, dalla piu' recente: (data, descrizione)
-CHANGELOG = [
- ('13 ottobre 2026', 'Correzioni redazionali: aggiornamento indirizzo Trust Center, uniformazione riferimenti di versione, '
-                     'aggiornamento elenco sub-responsabili, inserimento rubriche artt. 7 e 13. Nessuna modifica sostanziale.'),
+# data di pubblicazione della correzione del 13 ottobre: se il deploy avviene un altro giorno, cambiare qui e rigenerare
+PUBLISH_DATE = '13 ottobre 2026'
+
+# testo dell'Archivio versioni approvato dall'avvocato (da riportare cosi' com'e')
+ARCHIVE_TEXT = [
+ 'Condizioni Contrattuali Centralizzate, SLA, DPA: versione 1.0 del 9 ottobre 2026. Prima versione pubblicata.',
+ 'Correzione redazionale del %s (Condizioni Centralizzate v1.0): aggiunte le rubriche degli artt. 7 e 13. '
+ 'Il contenuto delle disposizioni è invariato. La copia della versione anteriore alla correzione è conservata in archivio.' % PUBLISH_DATE,
+ 'Indirizzo: dal %s i documenti sono pubblicati su trust.kore-hub.otech.one. Il precedente indirizzo '
+ 'trustcenter.kore.otech.one resta attivo e reindirizza ai documenti nella versione corrispondente.' % PUBLISH_DATE,
 ]
+
+# registro delle modifiche, dalla piu' recente: (data, descrizione)
+CHANGELOG = [(PUBLISH_DATE, ARCHIVE_TEXT[1]), (PUBLISH_DATE, ARCHIVE_TEXT[2])]
+
 
 DOCS = [
  dict(slug='termini-e-condizioni', group='Contrattuali', title='Condizioni Contrattuali Centralizzate',
@@ -182,6 +192,11 @@ def write(rel, text):
     open(path, 'w', encoding='utf-8', newline='\n').write(text)
 
 
+def ver_label(v):
+    """Etichetta di versione identica in testa e in fondo: "Versione 1.0 – 9 ottobre 2026"."""
+    return 'Versione %s – %s' % (v['v'], date(v['pub']))
+
+
 def doc_page(doc, v, is_current_url):
     r = '../' if is_current_url else '../../'
     body, _ = sections(doc, v)
@@ -196,6 +211,7 @@ def doc_page(doc, v, is_current_url):
     return (head('KORE — %s v%s' % (doc['title'], v['v']), r)
             + '\n<main class="tc-wrap tc-doc">\n <div class="tc-inner">\n  <div class="dh">\n'
             + '   <h1 class="dh-title">KORE - %s</h1>\n' % doc['title']
+            + '   <p class="dh-ver">%s</p>\n' % ver_label(v)
             + '   <p class="dh-sub">%s</p>\n' % doc['sub']
             + '   <dl class="dh-meta-grid">%s</dl>\n' % ''.join('<div><dt>%s</dt><dd>%s</dd></div>' % kv for kv in (
                 ('Versione', v['v']), ('Pubblicazione', date(v['pub'])), ('Stato', badge(v))))
@@ -206,7 +222,8 @@ def doc_page(doc, v, is_current_url):
             + '   </div>\n  </div>\n'
             + history_dialog(doc, v, r)
             + layout('  <p class="dh-notice%s">%s</p>\n\n' % ('' if v is cur else ' is-old', notice)
-                     + body.replace('{{root}}', r))
+                     + body.replace('{{root}}', r)
+                     + '  <p class="dh-verfoot">KORE - %s &middot; %s</p>\n' % (doc['title'], ver_label(v)))
             + '\n  ' + FOOT.format(r=r) + '\n </div>\n</main>\n' + HIST_JS + TOC_JS + '</body>\n</html>\n')
 
 
@@ -347,9 +364,8 @@ def home():
         planned = '    <p class="tr-none">Nessuna modifica pianificata.</p>\n'
     sec = ''.join('     <article class="tr-sec-card"><h3>%s</h3><p>%s</p></article>\n' % (t, x.replace('{{root}}', ''))
                   for t, x in SECURITY)
-    arch = ('    <section class="tr-arch" id="archivio-modifiche"><h3 class="tr-gh"><a href="registro-modifiche/">Registro delle modifiche</a></h3>\n'
-            '     <div class="tc-tabwrap"><table class="tc-table"><thead><tr><th>Data</th><th>Descrizione</th></tr></thead>'
-            '<tbody>%s</tbody></table></div>\n    </section>\n') % changelog_rows()
+    arch = ('    <section class="tr-arch" id="archivio-note">\n%s    </section>\n'
+            % ''.join('     <p class="tr-arch-note">%s</p>\n' % t for t in ARCHIVE_TEXT))
     for d in DOCS:
         rows = ''.join('<tr><td data-label="Versione"><a href="%s/%s/">v%s</a></td><td data-label="Data pubblicazione">%s</td>'
                        '<td data-label="Stato">%s</td><td data-label="Nota">%s</td>'
