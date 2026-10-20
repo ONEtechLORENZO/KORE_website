@@ -22,6 +22,8 @@ And `trust/` goes **only** on site 2, never on site 1.
 
 **Redirects (site 2):** short links like `/sla` already work through small redirect pages inside `trust/` (no server setup needed). For proper HTTP 301s, apply `trust-src/redirect-s3-routing-rules.json` as the S3 bucket's website routing rules (S3 + CloudFront).
 
+**CloudFront cache (both sites):** responses are cached at the edge for one year (`s-maxage=31536000`). After every deploy, create a CloudFront **invalidation for `/*`**; otherwise new pages, `robots.txt` and `sitemap.xml` are not served. See the SEO section below.
+
 ---
 
 Questo repository contiene **due siti separati**, pubblicati su **due domini diversi**.
@@ -51,7 +53,8 @@ Web root = radice del repository. Si pubblicano questi file e cartelle:
 | `richiedi-demo/` | `/richiedi-demo/` | solo il modulo di richiesta demo; carica `/sito.html` in un iframe, quindi `sito.html` deve essere pubblicato |
 | `acquista/` | `/acquista/` | percorso d'acquisto (build di `kore-react`) |
 | `Public/` | `/Public/...` | immagini, loghi e font usati dal sito |
-| `favicon.svg` | `/favicon.svg` | icona del sito |
+| `favicon.svg`, `favicon.ico`, `favicon-48.png`, `apple-touch-icon.png` | `/favicon.*`, `/apple-touch-icon.png` | icone del sito (scheda del browser, risultati di ricerca, iPhone) |
+| `robots.txt`, `sitemap.xml` | `/robots.txt`, `/sitemap.xml` | indicazioni per i motori di ricerca (vedi sezione SEO) |
 
 **Da NON pubblicare su `kore-hub.otech.one`** (sono sorgenti, strumenti o appartengono all'altro sito):
 
@@ -66,6 +69,7 @@ Web root = radice del repository. Si pubblicano questi file e cartelle:
 
 ### Quando togliere la pagina "coming soon"
 Rinominare `sito.html` in `index.html` (sostituendo la pagina coming soon). Il modulo in `richiedi-demo/` punta a `/sito.html`: se il sito torna su `index.html`, aggiornare anche quel percorso.
+I tag SEO di `sito.html` sono già scritti per l'indirizzo finale (`https://kore-hub.otech.one/`): dopo il rinomino **non va cambiato nessun tag**. Il resto è nella checklist della sezione SEO qui sotto.
 
 ### Aggiornare `acquista/`
 
@@ -124,9 +128,42 @@ la versione corrente e cambia quando esce una nuova versione):
 
 ---
 
+## SEO (sito 1, `kore-hub.otech.one`)
+
+Dominio e indirizzo definitivo della home: `https://kore-hub.otech.one/`. Tutti gli indirizzi nei tag sono assoluti.
+
+| Cosa | Dove | Note |
+|---|---|---|
+| Titolo, descrizione, robots, canonical, Open Graph, Twitter, hreflang, dati strutturati (Organization, WebSite, Service, WebPage) | `<head>` di `sito.html` | Scritti per `https://kore-hub.otech.one/`, cioè per quando `sito.html` diventa `index.html`. Nel `<head>` c'è anche un piccolo script che, con `?lang=en`, porta titolo, descrizione, canonical e anteprime social in inglese (il testo della pagina viene tradotto nel DOM, il `<head>` no). |
+| Stessi tag per la fase "coming soon" | `<head>` di `index.html` | Verranno sostituiti dal rinomino. |
+| Immagine di anteprima social 1200×630 | `Public/og-image.png` | Usata da LinkedIn, WhatsApp, Slack, X. |
+| Pagine **non** indicizzate (`noindex`) | `richiedi-demo/`, `acquista/` | Sono passi del percorso, non pagine da trovare su Google. Per `acquista/` il tag sta in `kore-react/index.html` (sorgente) **e** in `acquista/index.html` (build): se si rigenera la build resta. Per indicizzare `acquista/` basta togliere la riga `<meta name="robots" content="noindex,follow">`. |
+| Trust Center | dominio separato | Resta `noindex` (documenti contrattuali con indirizzi permanenti). |
+
+**`robots.txt` e `sitemap.xml`:** non bloccare in `robots.txt` le pagine `noindex`, altrimenti Google non legge il `noindex`.
+La sitemap elenca solo la home; aggiornare `<lastmod>` quando cambia in modo importante.
+
+### Checklist il giorno del lancio (10 novembre 2026)
+
+1. Rinominare `sito.html` in `index.html` (la coming soon viene sostituita) e aggiornare l'iframe di `richiedi-demo/` (vedi sopra).
+2. Aggiornare `<lastmod>` in `sitemap.xml`.
+3. Deploy, poi **invalidazione CloudFront su `/*`** (la cache è di un anno).
+4. Controllare `https://kore-hub.otech.one/robots.txt` e `/sitemap.xml` (devono rispondere 200).
+5. Search Console: aggiungere la proprietà del dominio `otech.one` (o `kore-hub.otech.one`), inviare `sitemap.xml`, "Controllo URL" sulla home e su `/?lang=en`, poi "Richiedi indicizzazione". Stessa cosa su Bing Webmaster Tools.
+6. Provare l'anteprima social: incollare `https://kore-hub.otech.one/` in LinkedIn Post Inspector e in un messaggio WhatsApp.
+7. Se `sito.html` era già stato indicizzato prima del lancio, dopo il rinomino risponde 404 e Google lo toglie da solo; la canonical della nuova home punta già a `/`.
+
+### Da sapere
+- La pagina è **un solo indirizzo**: le sezioni (`#funzioni`, `#pricing`…) sono schermate dentro la stessa pagina, non pagine separate, quindi Google le vede come un'unica pagina. Per posizionarsi anche su ricerche specifiche (es. "cessione del quinto lead", "automazione prestito personale") servono pagine dedicate con testo proprio: è un lavoro di contenuto, non solo tecnico.
+- Il titolo principale (`<h1>`) è "Non serve nascere fintech. Basta KORE.": non contiene parole chiave. Le parole chiave stanno in titolo, descrizione e nel testo delle sezioni.
+
+---
+
 ## Provare in locale
 
     python -m http.server 4010 --bind 127.0.0.1
+
+Senza Python (serve Node): `npx http-server . -p 4010 -a 127.0.0.1 -c-1`
 
 - Sito KORE: http://127.0.0.1:4010/ (sito completo: http://127.0.0.1:4010/sito.html, inglese: `?lang=en`)
 - Trust Center: http://127.0.0.1:4010/trust/
