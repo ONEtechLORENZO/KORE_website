@@ -1,0 +1,11 @@
+# Sito KORE — kore-hub.otech.one
+# Le pagine da non indicizzare (richiedi-demo, acquista) usano <meta name="robots" content="noindex">:
+# NON vanno bloccate qui, altrimenti Google non puo' leggere il noindex.
+User-agent: *
+Allow: /
+
+# Sorgenti che non devono essere pubblicate (difesa in piu', vedi README)
+Disallow: /kore-react/
+Disallow: /trust-src/
+
+Sitemap: https://kore-hub.otech.one/sitemap.xml
