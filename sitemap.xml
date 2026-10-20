@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Una sola pagina indicizzabile: la home. Prima del lancio e' la pagina "coming soon", dopo il lancio e' il sito completo
+     (sito.html rinominato in index.html). La versione inglese (/?lang=en) e' dichiarata con hreflang dentro la pagina.
+     Ad ogni modifica importante della home aggiornare <lastmod>. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://kore-hub.otech.one/</loc>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+</urlset>
