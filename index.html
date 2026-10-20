@@ -87,7 +87,8 @@ const robotY=ground-97;label('Agente AI',agent,robotY-44);rect(agent-22,robotY-2
 for(let k=0;k<2;k++){const p=k?.70:.36,x=mix(start.x,top.x,p),y=mix(start.y,top.y,p);rect(x-32,y-65,64,73,9,paper,soft);label(k?'ARGO+':'ARGO',x,y-78);rect(x-25,y-55,50,57,5,'#ede2fd');}
 line([[flag.x,flag.y],[flag.x,flag.y-61]],ink,2);ctx.fillStyle=purple;ctx.beginPath();ctx.moveTo(flag.x,flag.y-61);ctx.lineTo(flag.x+34,flag.y-49+Math.sin(time*2)*2);ctx.lineTo(flag.x,flag.y-36);ctx.closePath();ctx.fill();
 ctx.save();const cx=flag.x+57,cy=flag.y-76;
-ctx.textAlign='left';ctx.fillStyle=purple;ctx.font='500 17px "DM Mono",monospace';ctx.fillText('Coming Soon',cx,cy-26);
+/* sopra gli 800px la scritta è più piccola, così non si accosta all'arco dei secondi dell'orologio */
+ctx.textAlign='left';ctx.fillStyle=purple;ctx.font='500 '+(mobile?17:14)+'px "DM Mono",monospace';ctx.fillText('Coming Soon',cx,cy-26);
 const values=clockText().split(':'),names=['GIORNI','ORE','MINUTI','SECONDI'];
 values.forEach((value,i)=>{const ux=cx+i*45;ctx.textAlign='center';ctx.fillStyle=purple;ctx.font='500 27px "DM Mono",monospace';ctx.fillText(value,ux+16,cy+6);ctx.fillStyle='#927ba9';ctx.font='6px "DM Mono",monospace';ctx.fillText(names[i],ux+16,cy+21);if(i<3){ctx.fillStyle='#b49bd3';ctx.font='400 22px "DM Mono",monospace';ctx.fillText(':',ux+38,cy+3)}});
 drawClock(cx-30,cy-8);{const m=ctx.getTransform(),bx=(m.a*cx+m.c*(cy+34)+m.e)/d,by=(m.b*cx+m.d*(cy+34)+m.f)/d,el=window.__csBtn||(window.__csBtn=document.querySelector('.cs-demo'));if(el){el.style.transform='translate('+Math.round(r.left+bx)+'px,'+Math.round(r.top+by)+'px)';el.classList.add('is-on')}}ctx.restore();
