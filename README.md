@@ -143,7 +143,7 @@ Dominio e indirizzo definitivo della home: `https://kore-hub.otech.one/`. Tutti 
 **`robots.txt` e `sitemap.xml`:** non bloccare in `robots.txt` le pagine `noindex`, altrimenti Google non legge il `noindex`.
 La sitemap elenca solo la home; aggiornare `<lastmod>` quando cambia in modo importante.
 
-### Checklist il giorno del lancio (3 novembre 2026)
+### Checklist il giorno del lancio (10 novembre 2026)
 
 1. Rinominare `sito.html` in `index.html` (la coming soon viene sostituita) e aggiornare l'iframe di `richiedi-demo/` (vedi sopra).
 2. Aggiornare `<lastmod>` in `sitemap.xml`.
