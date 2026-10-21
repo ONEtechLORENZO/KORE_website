@@ -40,7 +40,20 @@ ARCHIVE_TEXT = [
 ]
 
 # registro delle modifiche, dalla piu' recente: (data, descrizione)
-CHANGELOG = [(PUBLISH_DATE, ARCHIVE_TEXT[1]), (PUBLISH_DATE, ARCHIVE_TEXT[2])]
+# data di pubblicazione dell'aggiornamento della pagina "Uso dell'AI in KORE"
+USO_AI_DATE = '21 ottobre 2026'
+
+# DPA v1.1: data di pubblicazione da impostare quando l'avvocato approva (finche' resta il segnaposto, la v1.1 NON va pubblicata)
+DPA_V11_DATE = '21 ottobre 2026'
+NOTE_DPA_V11 = ('Aggiornamento dell\'Allegato C: precisazione delle regioni di trattamento, dei tempi di conservazione e del '
+                'monitoraggio anti-abuso del Sub-responsabile Cooabit. Nessun nuovo Sub-responsabile.')
+
+CHANGELOG = [
+ (DPA_V11_DATE, 'Data Processing Agreement v1.1: aggiornamento dell\'Allegato C (Sub-responsabile Cooabit). Nessun nuovo Sub-responsabile.'),
+ (USO_AI_DATE, 'Uso dell’AI in KORE: aggiornati gli ambiti di utilizzo dell’AI, i fornitori dei modelli e i tempi di conservazione '
+               'nell’estrazione documentale.'),
+ (PUBLISH_DATE, ARCHIVE_TEXT[1]), (PUBLISH_DATE, ARCHIVE_TEXT[2]),
+]
 
 
 DOCS = [
@@ -54,7 +67,9 @@ DOCS = [
                      pdf='KORE_Service_Level_Agreement_v1.0.pdf', pdf_src='pdf/KORE_Service_Level_Agreement_v1.0.pdf')]),
  dict(slug='data-processing-agreement', group='Contrattuali', title='Data Processing Agreement',
       sub='Nomina a Responsabile del trattamento ai sensi dell’art. 28 del Regolamento (UE) 2016/679 - modello standard',
-      versions=[dict(v='1.0', pub='9 ottobre 2026', eff='', status='vigore', note=NOTE_V10,
+      versions=[dict(v='1.1', pub=DPA_V11_DATE, eff='', status='vigore', note=NOTE_DPA_V11,
+                     pdf='KORE_Data_Processing_Agreement_v1.1.pdf'),
+                dict(v='1.0', pub='9 ottobre 2026', eff='', status='superata', note=NOTE_V10,
                      pdf='KORE_Data_Processing_Agreement_v1.0.pdf', pdf_src='pdf/KORE_Data_Processing_Agreement_v1.0.pdf')]),
  dict(slug='condizioni-uso-utenti', group='Piattaforma', title='Condizioni d’uso Utenti',
       sub='Per gli Utenti autorizzati della Piattaforma',
@@ -89,8 +104,13 @@ SUBPROCESSORS = dict(
   ('Amazon Web Services EMEA SARL - Amazon SES', 'invio email', 'Sub-responsabile', 'UE', 'Non applicabile (SEE)'),
   ('Gupshup Inc.', 'canale WhatsApp e invio dei codici OTP', 'Sub-responsabile', 'Stati Uniti, UE e Asia (inclusa India)',
    'Stati Uniti: EU-US Data Privacy Framework; altri Paesi terzi: Clausole Contrattuali Tipo'),
-  ('Cooabit S.r.l.', 'OCR ed estrazione dati da documenti', 'Sub-responsabile', 'UE',
-   'Non applicabile (SEE); file e dati estratti cancellati 30 minuti dopo la chiusura della pratica'),
+  ('Cooabit S.r.l.', 'OCR ed estrazione dati da documenti, tramite i propri sub-responsabili Amazon Web Services e Google Cloud (modelli Gemini)',
+   'Sub-responsabile',
+   'UE – AWS Irlanda (eu-west-1) per server e database, AWS Milano (eu-south-1) per lo storage temporaneo cifrato dei documenti; Google Cloud in location UE',
+   'nessun trasferimento extra SEE; documenti, file intermedi e dati estratti cancellati automaticamente dall\'infrastruttura Cooabit '
+   'entro 30 minuti dal completamento dell\'elaborazione; contenuti inviati al modello AI conservati da Google fino a 55 giorni al solo fine '
+   'di monitoraggio anti-abuso, senza utilizzo per l\'addestramento; log applicativi conservati 90 giorni e log di sicurezza e audit '
+   '400 giorni, senza contenuti documentali'),
  ],
  others=[  # soggetti della filiera che non sono sub-responsabili: (soggetto, attivita', ruolo privacy)
   ('Meta Platforms Ireland Ltd (WhatsApp)', 'trasporto dei messaggi WhatsApp',
@@ -122,7 +142,7 @@ FOOT = ('<footer class="tr-foot"><span>One Tech S.r.l. &middot; Via Gustavo Fara
         'PEC <a href="mailto:One@pec.cloud">One@pec.cloud</a></span>'
         '<span><a href="{r}cookie-policy/">Cookie policy</a></span></footer>')
 
-STATUS = {'bozza': ('Bozza', ''), 'vigore': ('Active', ' is-on'), 'aggiornamento': ('In aggiornamento', ' is-upd'), 'superata': ('Superata', ' is-old')}
+STATUS = {'bozza': ('Bozza', ''), 'vigore': ('Active', ' is-on'), 'aggiornamento': ('In aggiornamento', ' is-upd'), 'superata': ('Superseded', ' is-old')}
 
 ICON = {
  'right': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>',
@@ -153,7 +173,7 @@ def badge(v):
 
 
 def sections(doc, v):
-    s = open(os.path.join(HERE, 'content', doc['slug'], vkey(v) + '.html'), encoding='utf-8').read()
+    s = open(os.path.join(HERE, 'content', doc['slug'], vkey(v) + '.html'), encoding='utf-8').read().replace('{{pub}}', date(v['pub']))
     return s, re.findall(r'<h2><i>\d+</i>(.*?)</h2>', s)
 
 
@@ -205,8 +225,8 @@ def doc_page(doc, v, is_current_url):
         notice = ('Questa è la versione corrente. Indirizzo permanente di questa versione: '
                   '<a href="%s%s/%s/">%s</a>') % (r, doc['slug'], vkey(v), perm)
     else:
-        notice = ('Questa versione non è più quella corrente. '
-                  '<a href="%s%s/">Vai alla versione corrente (v%s)</a>') % (r, doc['slug'], cur['v'])
+        notice = ('Questa versione è stata sostituita dalla <a href="%s%s/%s/">versione %s</a>'
+                  % (r, doc['slug'], vkey(cur), cur['v']))
     return (head('KORE — %s v%s' % (doc['title'], v['v']), r)
             + '\n<main class="tc-wrap tc-doc">\n <div class="tc-inner">\n  <div class="dh">\n'
             + '   <h1 class="dh-title">KORE - %s</h1>\n' % doc['title']

@@ -27,17 +27,18 @@
  <nav class="tc-toc" aria-label="Indice del documento"><details open><summary>Indice del documento</summary><p class="tc-toc-h">Indice del documento</p><ol><li><a href="#art-1"><i>01</i><span>Dove KORE usa l’AI</span></a></li><li><a href="#art-2"><i>02</i><span>Dati utilizzati dagli agenti AI</span></a></li><li><a href="#art-3"><i>03</i><span>Supervisione umana</span></a></li><li><a href="#art-4"><i>04</i><span>Fornitori dei modelli</span></a></li><li><a href="#art-5"><i>05</i><span>Limiti e responsabilità</span></a></li></ol></details></nav>
  <div class="tc-body">
   <section class="tc-sec" id="art-1"><h2><i>01</i>Dove KORE usa l’AI</h2><i class="tc-rule" aria-hidden="true"></i>
-   <p>KORE utilizza l’intelligenza artificiale in tre ambiti:</p>
+   <p>KORE utilizza l’intelligenza artificiale nei seguenti ambiti:</p>
    <ul class="tc-list">
     <li><span><b>assistente conversazionale</b>, che dialoga con i clienti finali su WhatsApp per raccogliere informazioni e documenti relativi alla richiesta;</span></li>
     <li><span><b>estrazione documentale</b>, che legge i documenti caricati (ad esempio buste paga, documenti d’identità, estratti conto) e ne estrae i dati in forma strutturata;</span></li>
-    <li><span><b>pre-valutazione</b>, che organizza i dati raccolti per supportare la valutazione di eleggibilità svolta dal cliente.</span></li>
+    <li><span><b>importazione dei lead</b>, per riconoscere e mappare automaticamente le colonne dei file importati.</span></li>
    </ul>
+   <p>La pre-valutazione di eleggibilità non utilizza modelli di intelligenza artificiale: l’esito è calcolato con regole configurate dal cliente, verificabili e ripetibili.</p>
    <p>Chi interagisce con l’assistente conversazionale è informato che sta dialogando con un sistema automatizzato.</p>
   </section>
 
   <section class="tc-sec" id="art-2"><h2><i>02</i>Dati utilizzati dagli agenti AI</h2><i class="tc-rule" aria-hidden="true"></i>
-   <p>Gli agenti AI utilizzano solo i dati necessari al servizio: il contenuto delle conversazioni e i documenti forniti dal cliente finale e i dati estratti da tali documenti. One Tech non utilizza i dati dei clienti per addestrare modelli di intelligenza artificiale destinati ad altri clienti, e i fornitori dei modelli non utilizzano i dati per addestrare i propri modelli. I documenti elaborati per l’estrazione vengono cancellati dal fornitore 30 minuti dopo la chiusura della pratica.</p>
+   <p>Gli agenti AI utilizzano solo i dati necessari al servizio: il contenuto delle conversazioni e i documenti forniti dal cliente finale e i dati estratti da tali documenti. One Tech non utilizza i dati dei clienti per addestrare modelli di intelligenza artificiale destinati ad altri clienti, e i fornitori dei modelli non utilizzano i dati per addestrare i propri modelli. Nell’estrazione documentale, documenti, file intermedi e dati estratti sono cancellati dall’infrastruttura del fornitore entro 30 minuti dal completamento dell’elaborazione. Il fornitore del modello (Google Cloud) può conservare i contenuti elaborati fino a 55 giorni al solo fine di prevenire usi abusivi del servizio, senza utilizzarli per l’addestramento.</p>
   </section>
 
   <section class="tc-sec" id="art-3"><h2><i>03</i>Supervisione umana</h2><i class="tc-rule" aria-hidden="true"></i>
@@ -46,8 +47,8 @@
 
   <section class="tc-sec" id="art-4"><h2><i>04</i>Fornitori dei modelli</h2><i class="tc-rule" aria-hidden="true"></i>
    <div class="tc-tabwrap"><table class="tc-table"><thead><tr><th>Fornitore</th><th>Utilizzo</th><th>Dove</th></tr></thead><tbody>
-    <tr><td data-label="Fornitore">Amazon Web Services - Amazon Bedrock</td><td data-label="Utilizzo">assistente conversazionale e funzioni AI della piattaforma</td><td data-label="Dove">regioni dell’Unione Europea</td></tr>
-    <tr><td data-label="Fornitore">Cooabit S.r.l.</td><td data-label="Utilizzo">estrazione dati da documenti</td><td data-label="Dove">Unione Europea</td></tr>
+    <tr><td data-label="Fornitore">Amazon Web Services - Amazon Bedrock (modelli Amazon Nova)</td><td data-label="Utilizzo">assistente conversazionale e funzioni AI della piattaforma</td><td data-label="Dove">regioni dell’Unione Europea</td></tr>
+    <tr><td data-label="Fornitore">Google Cloud - modelli Gemini, tramite Cooabit S.r.l.</td><td data-label="Utilizzo">estrazione dati da documenti</td><td data-label="Dove">Unione Europea</td></tr>
    </tbody></table></div>
    <p>L’elenco completo dei fornitori che trattano dati per conto dei clienti è nella sezione <a href="../#sub-responsabili">Sub-responsabili</a>.</p>
   </section>
