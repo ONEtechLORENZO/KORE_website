@@ -67,6 +67,28 @@
  },
  {
   "Condition": {
+   "KeyPrefixEquals": "data-processing-agreement/v1.1"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "data-processing-agreement/v1-1/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
+   "KeyPrefixEquals": "data-processing-agreement/v1.1/"
+  },
+  "Redirect": {
+   "HostName": "trust.kore-hub.otech.one",
+   "Protocol": "https",
+   "ReplaceKeyWith": "data-processing-agreement/v1-1/",
+   "HttpRedirectCode": "301"
+  }
+ },
+ {
+  "Condition": {
    "KeyPrefixEquals": "dpa"
   },
   "Redirect": {
