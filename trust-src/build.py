@@ -44,7 +44,7 @@ ARCHIVE_TEXT = [
 USO_AI_DATE = '21 ottobre 2026'
 
 # DPA v1.1: data di pubblicazione da impostare quando l'avvocato approva (finche' resta il segnaposto, la v1.1 NON va pubblicata)
-DPA_V11_DATE = '[data di pubblicazione]'
+DPA_V11_DATE = '9 ottobre 2026'
 NOTE_DPA_V11 = ('Aggiornamento dell\'Allegato C: precisazione delle regioni di trattamento, dei tempi di conservazione e del '
                 'monitoraggio anti-abuso del Sub-responsabile Cooabit. Nessun nuovo Sub-responsabile.')
 
