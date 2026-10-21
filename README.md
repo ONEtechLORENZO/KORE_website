@@ -24,6 +24,24 @@ And `trust/` goes **only** on site 2, never on site 1.
 
 **CloudFront cache (both sites):** responses are cached at the edge for one year (`s-maxage=31536000`). After every deploy, create a CloudFront **invalidation for `/*`**; otherwise new pages, `robots.txt` and `sitemap.xml` are not served. See the SEO section below.
 
+## This release: merging `Pranav` into `main` (21 October 2026)
+
+What changes on each domain. Everything not listed stays exactly as it is.
+
+| Domain | What changes for visitors | Files that change |
+|---|---|---|
+| **1. `kore-hub.otech.one`** | Demo request page `/richiedi-demo/`: the sentence under the title ("Prenota una demo e scopri…") is removed, and the form is always purple, even if the visitor chose the dark theme on the site. The full site `sito.html` and the coming-soon page do **not** change. | `richiedi-demo/index.html` |
+| **2. `trust.kore-hub.otech.one`** | Page `/uso-ai/` ("Uso dell'AI in KORE"): new texts in sections 01, 02 and 04. Page `/registro-modifiche/`: new line dated 21 ottobre 2026 at the top. All legal documents, PDFs and URLs do **not** change. | `trust/uso-ai/index.html`, `trust/registro-modifiche/index.html` |
+| — (not published) | Nothing: sources and the private evidence archive (copy of the two Trust Center pages before the change). | `trust-src/build.py`, `trust-src/content/pages/uso-ai.html`, `trust-src/archivio/2026-10-21_prima-di-uso-ai/` |
+
+**Not in this release:** the **DPA v1.1** is on the separate branch `dpa-v1-1`. It must **not** be merged or published until the lawyer approves; only then will it be moved to `Pranav`.
+
+**Check after deploy (and after the CloudFront invalidation):**
+- `https://kore-hub.otech.one/richiedi-demo/`: no sentence under "Vuoi vedere KORE in azione?", purple background.
+- `https://trust.kore-hub.otech.one/uso-ai/`: section 01 starts with "KORE utilizza l'intelligenza artificiale nei seguenti ambiti:".
+- `https://trust.kore-hub.otech.one/registro-modifiche/`: first line "21 ottobre 2026 – Uso dell'AI in KORE…".
+- `https://trust.kore-hub.otech.one/data-processing-agreement/v1-0/`: still the current version (no v1.1 yet).
+
 ---
 
 Questo repository contiene **due siti separati**, pubblicati su **due domini diversi**.
