@@ -25,8 +25,10 @@
  var f=document.getElementById('f');
  var CSS='header.top,.kwa,#kf,#kore-intro{display:none!important}'+
          'html,body{background:#6315e8!important}'+
-         'html.theme-dark,html.theme-dark body{background:#1d1430!important}'+
-         '#dm-screen .dm-mat .op-dl{display:block;margin-top:8px;font-size:11.5px;color:#fff;text-decoration:underline;text-underline-offset:3px}';
+         'html.theme-dark,html.theme-dark body{background:#6315e8!important}'+
+         '#dm-screen .dm-mat .op-dl{display:block;margin-top:8px;font-size:11.5px;color:#fff;text-decoration:underline;text-underline-offset:3px}'+
+         /* via la frase sotto il titolo ("Prenota una demo e scopri come automatizzare...") */
+         '#dm-screen .dm-sub{display:none!important}';
  var PDF='/Public/One-pager%20KORE.pdf';
  var PRIVACY='https://trust.kore-hub.otech.one/informativa-privacy-sito/v1-0/';
  /* l'unica pagina ammessa: il modulo */
@@ -36,6 +38,9 @@
   /* solo sulla pagina vera del modulo, non sul documento vuoto iniziale dell'iframe */
   if(!d||!d.head||!/\/sito\.html/.test(d.URL)||!d.getElementById('dm-screen')||d.getElementById('solo-demo'))return;
   var s=d.createElement('style');s.id='solo-demo';s.textContent=CSS;d.head.appendChild(s);
+  /* sempre viola: qui si ignora il tema scuro scelto sul sito (la preferenza salvata del sito non cambia) */
+  var H=d.documentElement;function light(){if(H.classList.contains('theme-dark'))H.classList.remove('theme-dark')}
+  light();new w.MutationObserver(light).observe(H,{attributes:true,attributeFilter:['class']});
   function guard(){if(OK.indexOf(w.location.hash)<0){w.location.replace('#contatti');if(w.__dmOpen)w.__dmOpen()}}
   w.addEventListener('hashchange',guard);guard();
   /* "informativa privacy" nel consenso: porta all'Informativa privacy del sito nel Trust Center (versione 1.0),
