@@ -40,7 +40,14 @@ ARCHIVE_TEXT = [
 ]
 
 # registro delle modifiche, dalla piu' recente: (data, descrizione)
-CHANGELOG = [(PUBLISH_DATE, ARCHIVE_TEXT[1]), (PUBLISH_DATE, ARCHIVE_TEXT[2])]
+# data di pubblicazione dell'aggiornamento della pagina "Uso dell'AI in KORE"
+USO_AI_DATE = '21 ottobre 2026'
+
+CHANGELOG = [
+ (USO_AI_DATE, 'Uso dell’AI in KORE: aggiornati gli ambiti di utilizzo dell’AI, i fornitori dei modelli e i tempi di conservazione '
+               'nell’estrazione documentale.'),
+ (PUBLISH_DATE, ARCHIVE_TEXT[1]), (PUBLISH_DATE, ARCHIVE_TEXT[2]),
+]
 
 
 DOCS = [

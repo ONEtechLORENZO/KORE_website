@@ -1,0 +1,8 @@
+Acquisizione: 2026-10-21 08:35:30 UTC da https://trust.kore-hub.otech.one
+Stato acquisito: pagine 'Uso dell'AI in KORE' e 'Registro delle modifiche' pubblicate prima delle modifiche del 21 ottobre 2026.
+
+SHA-256:
+b83164131267eae48a8aceeedcabb5fe9c6fa87b051e6762537c47a39bd1076f *registro-modifiche.html
+8edc4689131593880862c2f74108b5ce6823a8949a52a6caf087b028ad0220f7 *uso-ai.html
+bfda033030294f27c144e7c961fb2f7a762c3f4341817b1224c6d5c29f97ed94 *registro-modifiche.pdf
+5a08e06741965b6647d03c4eee6f8418c85b998c1797afee7fcaebc80018b10f *uso-ai.pdf
