@@ -31,16 +31,18 @@ What changes on each domain. Everything not listed stays exactly as it is.
 | Domain | What changes for visitors | Files that change |
 |---|---|---|
 | **1. `kore-hub.otech.one`** | Demo request page `/richiedi-demo/`: the sentence under the title ("Prenota una demo e scopri…") is removed, and the form is always purple, even if the visitor chose the dark theme on the site. The full site `sito.html` and the coming-soon page do **not** change. | `richiedi-demo/index.html` |
-| **2. `trust.kore-hub.otech.one`** | Page `/uso-ai/` ("Uso dell'AI in KORE"): new texts in sections 01, 02 and 04. Page `/registro-modifiche/`: new line dated 21 ottobre 2026 at the top. All legal documents, PDFs and URLs do **not** change. | `trust/uso-ai/index.html`, `trust/registro-modifiche/index.html` |
+| **2. `trust.kore-hub.otech.one`** | **DPA v1.1 published** (approved by the lawyer): new page `/data-processing-agreement/v1-1/` and PDF `KORE_Data_Processing_Agreement_v1.1.pdf`; **v1.0 stays online unchanged** at `/data-processing-agreement/v1-0/` (now "Superseded", with a link to v1.1); home page DPA card, PDF list, Archivio and Cooabit row updated. Page `/uso-ai/` ("Uso dell'AI in KORE"): new texts in sections 01, 02 and 04. Page `/registro-modifiche/`: new lines dated 25 and 21 ottobre 2026. All other documents, PDFs and URLs do **not** change. | `trust/data-processing-agreement/…` (incl. new `v1-1/`, `v1.1/`), `trust/assets/pdf/KORE_Data_Processing_Agreement_v1.1.pdf`, `trust/index.html`, `trust/uso-ai/index.html`, `trust/registro-modifiche/index.html` |
 | — (not published) | Nothing: sources and the private evidence archive (copy of the two Trust Center pages before the change). | `trust-src/build.py`, `trust-src/content/pages/uso-ai.html`, `trust-src/archivio/2026-10-21_prima-di-uso-ai/` |
 
-**Not in this release:** the **DPA v1.1** is on the separate branch `dpa-v1-1`. It must **not** be merged or published until the lawyer approves; only then will it be moved to `Pranav`.
+**DPA:** both versions must stay online: v1.1 is the current one; v1.0 is kept for contracts signed on it (the short link `/dpa` keeps pointing to v1.0). Never delete either.
 
 **Check after deploy (and after the CloudFront invalidation):**
 - `https://kore-hub.otech.one/richiedi-demo/`: no sentence under "Vuoi vedere KORE in azione?", purple background.
 - `https://trust.kore-hub.otech.one/uso-ai/`: section 01 starts with "KORE utilizza l'intelligenza artificiale nei seguenti ambiti:".
 - `https://trust.kore-hub.otech.one/registro-modifiche/`: first line "21 ottobre 2026 – Uso dell'AI in KORE…".
-- `https://trust.kore-hub.otech.one/data-processing-agreement/v1-0/`: still the current version (no v1.1 yet).
+- `https://trust.kore-hub.otech.one/data-processing-agreement/v1-1/`: "Versione 1.1 – 25 ottobre 2026", Active; Annex C, Cooabit row with the new texts.
+- `https://trust.kore-hub.otech.one/data-processing-agreement/v1-0/`: still online, "Superseded", notice "Questa versione è stata sostituita dalla versione 1.1".
+- `https://trust.kore-hub.otech.one/assets/pdf/KORE_Data_Processing_Agreement_v1.1.pdf` downloads; the v1.0 PDF is still available.
 
 ---
 
