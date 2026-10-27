@@ -98,14 +98,16 @@ The result should show analytics granted and ads denied.
 
 ## Production deployment
 
-Deploy the marketing site exactly as described in `README.md`, with these additional web-root files:
+Production deployment is performed by DevOps through the existing AWS Amplify workflow. This integration does not define or change the Amplify build command, build specification, connected branch, or artifact base/output directory.
 
-- `clarity-consent.js`
-- `clarity-consent.css`
-- updated `index.html`
-- updated `sito.html`
-- `privacy-marketing/index.html` (only after privacy approval)
+The updated `index.html` and `sito.html` reference three new assets. DevOps must verify that Amplify's published output contains:
 
-Do not copy the integration into `trust/`, `acquista/`, or `richiedi-demo/`. After upload, invalidate the marketing site's CloudFront cache for `/*`, then repeat the DevTools tests against the production domain. Do not treat local tag loading as proof that production recordings are arriving.
+- `/clarity-consent.js` from `clarity-consent.js`
+- `/clarity-consent.css` from `clarity-consent.css`
+- `/privacy-marketing/index.html` from `privacy-marketing/index.html`
+
+DevOps must also verify the existing Amplify production branch and revision, build specification, artifact base/output directory, clean-URL behavior for `/privacy-marketing/`, expected MIME types, and consistent release/cache propagation. Do not infer or replace those settings from this repository documentation.
+
+Production remains **blocked until the draft marketing privacy/cookie notice is approved**. The notice must remain marked as a draft until that approval is recorded. Do not include the integration in the Trust Center, checkout, or demo application, and do not change their route exclusions. After an approved Amplify deployment, repeat the DevTools tests against the production domain. Do not treat local tag loading as proof that production recordings are arriving.
 
 In the Clarity dashboard, select project `z3sy7q9gz9`, use the **Today** date range, and check **Dashboard > Live users/Recordings**. Heatmaps can take around 30 minutes to populate; select the exact production URL in **Heatmaps** and confirm only eligible marketing URLs appear.
