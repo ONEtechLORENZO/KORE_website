@@ -1,0 +1,81 @@
+.kore-clarity-consent,
+.kore-clarity-manage {
+  font-family: "DM Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.kore-clarity-consent {
+  position: fixed;
+  z-index: 2147483646;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #1c1330;
+  background: #fff;
+  border: 1px solid rgba(99, 21, 232, .3);
+  box-shadow: 0 18px 55px rgba(28, 19, 48, .2);
+}
+
+.kore-clarity-copy { max-width: 680px; }
+.kore-clarity-copy strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #6315e8;
+}
+.kore-clarity-copy p { margin: 0; font-size: 11px; line-height: 1.65; }
+.kore-clarity-copy .kore-clarity-links { margin-top: 8px; }
+.kore-clarity-copy a { color: #6315e8; text-underline-offset: 3px; }
+.kore-clarity-actions { display: flex; flex: none; gap: 10px; }
+
+.kore-clarity-actions button,
+.kore-clarity-manage {
+  appearance: none;
+  border: 1px solid #6315e8;
+  border-radius: 999px;
+  padding: 10px 15px;
+  color: #6315e8;
+  background: #fff;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.kore-clarity-actions button.is-primary { color: #fff; background: #6315e8; }
+.kore-clarity-actions button:focus-visible,
+.kore-clarity-manage:focus-visible { outline: 3px solid rgba(99, 21, 232, .35); outline-offset: 2px; }
+
+.kore-clarity-manage {
+  position: fixed;
+  z-index: 2147483645;
+  right: 16px;
+  bottom: 12px;
+  padding: 7px 11px;
+  font-size: 9px;
+  opacity: .72;
+}
+.kore-clarity-consent ~ .kore-clarity-manage { display: none; }
+
+html.theme-dark .kore-clarity-consent,
+html.theme-dark .kore-clarity-actions button,
+html.theme-dark .kore-clarity-manage {
+  color: #e9dcff;
+  background: #15101d;
+  border-color: rgba(160, 107, 255, .6);
+}
+html.theme-dark .kore-clarity-copy strong,
+html.theme-dark .kore-clarity-copy a,
+html.theme-dark .kore-clarity-actions button,
+html.theme-dark .kore-clarity-manage { color: #a06bff; }
+html.theme-dark .kore-clarity-actions button.is-primary { color: #fff; background: #8b4dff; }
+
+@media (max-width: 760px) {
+  .kore-clarity-consent { right: 12px; bottom: 12px; left: 12px; display: block; padding: 16px; }
+  .kore-clarity-actions { justify-content: flex-end; margin-top: 14px; }
+}
